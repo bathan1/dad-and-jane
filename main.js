@@ -76,6 +76,7 @@ window.ontouchend = e => handleMouseUp(e.touches[0]);
 window.ontouchmove = e => handleMouseMove(e.touches[0]);
 
 const images = document.querySelectorAll(".image");
+let closestIndex = 0;
 function updateCount() {
   const centerX = window.innerWidth * 0.5; // Center of the viewport
   let currClosestIndex = -1; // Start with an invalid index
@@ -95,6 +96,7 @@ function updateCount() {
   // If we found a closest image, update the counter
   if (currClosestIndex !== -1) {
     document.getElementById("image-counter").innerHTML = `K-0${1 + currClosestIndex}`;
+    closestIndex = currClosestIndex;
   }
 }
 
