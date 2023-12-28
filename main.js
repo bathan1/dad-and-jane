@@ -143,10 +143,14 @@ function centerOnImage(delta, imageToExpand, scaleFactor = 1) {
     image.classList.remove("unblur");
     if (image !== imageToExpand) {
       image.classList.add("blur-effect");
+      image.animate({
+        objectPosition: `${100 + nextPercentage}% center`
+      }, { duration: 600, fill: "forwards" });
+    } else {
+      image.animate({
+        objectPosition: "center"
+      }, { duration: 600, fill: "forwards" });
     }
-    image.animate({
-      objectPosition: `${100 + nextPercentage}% center`
-    }, { duration: 600, fill: "forwards" });
   }
 
   setTimeout(() => {
@@ -156,10 +160,11 @@ function centerOnImage(delta, imageToExpand, scaleFactor = 1) {
 
 function expandImage(image, scaleFactor) {
   image.style.transform = `scale(${scaleFactor})`;
-  image.style.width = "80vmin";
-  image.style.height = "54vmin";
+  image.style.width = "56vmin";
+  image.style.height = "auto";
   image.style.zIndex = '1000';
-  image.style.transition = 'transform 0.6s ease, width 0.6s ease, height 0.6s ease, z-index 0.6s ease'; // Apply transition to transform only
+  image.style.objectFit = "contain";
+  image.style.transition = 'transform 0.6s ease, width 0.6s ease, height 0.6s ease, z-index 0.6s ease'; 
 
   window.addEventListener('click', () => {
     revertImage(image);
@@ -174,10 +179,11 @@ function revertImage(image) {
     image.classList.add("unblur");
     image.classList.remove("blur-effect");
   }
+  image.style.objectFit = "cover";
   image.style.transform = `scale(1)`;
   image.style.zIndex = '';
-  image.style.width = '';
-  image.style.height = '';
+  image.style.width = '40vmin';
+  image.style.height = '56vmin';
 }
 
 // When calling centerOnImage, pass the scale factor
