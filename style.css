@@ -9,15 +9,19 @@
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   height: 100vh;
   width: 100vw;
-  background-color: black;
+  background-color: #faf0e6;
   margin: 0rem;
   overflow: hidden;
 }
 
 header {
-  color: #FFFFFF;
+  color: #000000;
 }
 
 nav {
@@ -62,6 +66,7 @@ nav {
 }
 
 #image-counter {
-  color: #FFFFFF;
+  color: #000000;
   font-size: 32px;
+  padding: 16px;
 }
