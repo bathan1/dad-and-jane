@@ -68,11 +68,54 @@ function handleScroll(e) {
 
 // Bind event listeners to window
 window.addEventListener("wheel", handleScroll);
-window.addEventListener("mousedown", handleMouseDown);
-window.addEventListener("mouseup", handleMouseUp);
-window.addEventListener("mousemove", handleMouseMove);
+window.addEventListener("mousedown", handleMouseDown); window.addEventListener("mouseup", handleMouseUp); window.addEventListener("mousemove", handleMouseMove);
 
 // Add touch capabilities
 window.ontouchstart = e => handleMouseDown(e.touches[0]);
 window.ontouchend = e => handleMouseUp(e.touches[0]);
 window.ontouchmove = e => handleMouseMove(e.touches[0]);
+
+const images = document.querySelectorAll(".image");
+function updateCount() {
+  const centerX = window.innerWidth * 0.5; // Center of the viewport
+  let currClosestIndex = -1; // Start with an invalid index
+  let currClosestDist = Number.MAX_VALUE; 
+
+  // Loop through all images, not just the ones in 'entries'
+  Array.from(images).forEach((image, index) => {
+    const rect = image.getBoundingClientRect();
+    const entryCenterX = rect.left + (rect.width / 2);
+    const dist = Math.abs(entryCenterX - centerX);
+    if (dist < currClosestDist) {
+      currClosestDist = dist;
+      currClosestIndex = index; // Directly use the loop index
+    }
+  });
+
+  // If we found a closest image, update the counter
+  if (currClosestIndex !== -1) {
+    document.getElementById("image-counter").innerHTML = `K-0${1 + currClosestIndex}`;
+  }
+}
+
+// Still need to instantiate the observer to call updateCount on intersection changes
+const observer = new IntersectionObserver(updateCount, {
+  // The threshold might need to be an array of thresholds to ensure continuous updates
+  threshold: buildThresholdList()
+});
+
+images.forEach(image => observer.observe(image));
+
+// This function builds an array of thresholds to ensure the callback runs continuously as elements are scrolled
+function buildThresholdList() {
+  let thresholds = [];
+  let numSteps = 20;
+  for (let i=1.0; i<=numSteps; i++) {
+    let ratio = i/numSteps;
+    thresholds.push(ratio);
+  }
+  return thresholds;
+}
+
+// Call updateCount initially to set the counter at the start
+updateCount();

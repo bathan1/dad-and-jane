@@ -1,9 +1,38 @@
+@font-face {
+  font-family: "TimesNewRomanMTStd-BoldCond";
+  src: url("/Times\ New\ Roman\ MT\ Std\ Bold\ Condensed.otf") format("opentype");
+  font-style: normal;
+}
+
+:root {
+  font-family: 'TimesNewRomanMTStd-BoldCond', Times New Roman, serif;
+}
+
 body {
   height: 100vh;
   width: 100vw;
   background-color: black;
   margin: 0rem;
   overflow: hidden;
+}
+
+header {
+  color: #FFFFFF;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+}
+
+.nav-div {
+  padding: 16px;
+  cursor: pointer; 
+  font-size: 24px;
+}
+
+.inactive {
+  color: #b0b0b0;
 }
 
 #image-track {
@@ -21,4 +50,18 @@ body {
   height: 56vmin;
   object-fit: cover;
   object-position: 100% 50%;
+}
+
+#x-hair {
+  height: 32px;
+  position: absolute; /* Positioned absolutely relative to its closest positioned ancestor */
+  top: 50%;  /* Center vertically, adjust as needed */
+  left: 50%; /* Center horizontally, adjust as needed */
+  transform: translate(-50%, -50%); /* This ensures it centers exactly where you want it */
+  z-index: 10;
+}
+
+#image-counter {
+  color: #FFFFFF;
+  font-size: 32px;
 }
