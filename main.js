@@ -118,23 +118,14 @@ function buildThresholdList() {
   }
   return thresholds;
 }
-
 // Call updateCount initially to set the counter at the start
 updateCount();
 
-track.onclick = () => {
-  const imageToExpand = images[closestIndex];
-  const centerX = window.innerWidth * 0.5; // Center of the viewport
-  const rect = imageToExpand.getBoundingClientRect();
-  const entryCenterX = rect.left + (rect.width / 2);
-  const delta = (centerX - entryCenterX) * -1;
-  centerOnImage(delta, imageToExpand); 
-
-};
-
-function centerOnImage(delta, imageToExpand) {
+function centerOnImage(delta, imageToExpand, scaleFactor = 1) {
+  // Adjust centering calculation to account for the scale factor
+  const adjustedDelta = delta / scaleFactor;
   const maxDelta = track.scrollWidth;
-  const percentage = (delta / maxDelta) * -100;
+  const percentage = (adjustedDelta / maxDelta) * -100;
   const nextPercentageNotBound = parseFloat(track.dataset.prevPercentage) + percentage;
   const nextPercentage = Math.max(Math.min(nextPercentageNotBound, 0), -100);
   
@@ -143,10 +134,60 @@ function centerOnImage(delta, imageToExpand) {
     transform: `translate(${nextPercentage}%, -50%)`
   }, { duration: 600, fill: "forwards" });
   
+  document.getElementById("x-hair").animate({
+    opacity: `0%`
+  }, { duration: 600, fill: "forwards" });
+
+
   for (const image of track.getElementsByClassName("image")) {
-      image.animate({
-        objectPosition: `${100 + nextPercentage}% center`,
-      }, { duration: 600, fill: "forwards" });
+    image.classList.remove("unblur");
+    if (image !== imageToExpand) {
+      image.classList.add("blur-effect");
+    }
+    image.animate({
+      objectPosition: `${100 + nextPercentage}% center`
+    }, { duration: 600, fill: "forwards" });
   }
 
+  setTimeout(() => {
+    expandImage(imageToExpand, scaleFactor);
+  }, 600); // Start expanding after the centering animation completes
+};
+
+function expandImage(image, scaleFactor) {
+  image.style.transform = `scale(${scaleFactor})`;
+  image.style.width = "80vmin";
+  image.style.height = "54vmin";
+  image.style.zIndex = '1000';
+  image.style.transition = 'transform 0.6s ease, width 0.6s ease, height 0.6s ease, z-index 0.6s ease'; // Apply transition to transform only
+
+  window.addEventListener('click', () => {
+    revertImage(image);
+  }, { once: true });
+}
+
+function revertImage(image) {
+  document.getElementById("x-hair").animate({
+    opacity: "100%"
+  }, { duration: 600, fill: "forwards" });
+  for (const image of track.getElementsByClassName("image")) {
+    image.classList.add("unblur");
+    image.classList.remove("blur-effect");
+  }
+  image.style.transform = `scale(1)`;
+  image.style.zIndex = '';
+  image.style.width = '';
+  image.style.height = '';
+}
+
+// When calling centerOnImage, pass the scale factor
+const scaleFactor = 1.5;
+let isCentered = false;
+track.onclick = () => {
+  const imageToExpand = images[closestIndex];
+  const centerX = window.innerWidth * 0.5; // Center of the viewport
+  const rect = imageToExpand.getBoundingClientRect();
+  const entryCenterX = rect.left + (rect.width / 2);
+  const delta = (centerX - entryCenterX) * -1;
+  centerOnImage(delta, imageToExpand, scaleFactor);
 };
