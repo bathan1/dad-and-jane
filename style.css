@@ -57,7 +57,7 @@ nav {
 }
 
 #x-hair {
-  height: 32px;
+  height: 24px;
   position: absolute; /* Positioned absolutely relative to its closest positioned ancestor */
   top: 50%;  /* Center vertically, adjust as needed */
   left: 50%; /* Center horizontally, adjust as needed */

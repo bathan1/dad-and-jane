@@ -121,3 +121,32 @@ function buildThresholdList() {
 
 // Call updateCount initially to set the counter at the start
 updateCount();
+
+track.onclick = () => {
+  const imageToExpand = images[closestIndex];
+  const centerX = window.innerWidth * 0.5; // Center of the viewport
+  const rect = imageToExpand.getBoundingClientRect();
+  const entryCenterX = rect.left + (rect.width / 2);
+  const delta = (centerX - entryCenterX) * -1;
+  centerOnImage(delta, imageToExpand); 
+
+};
+
+function centerOnImage(delta, imageToExpand) {
+  const maxDelta = track.scrollWidth;
+  const percentage = (delta / maxDelta) * -100;
+  const nextPercentageNotBound = parseFloat(track.dataset.prevPercentage) + percentage;
+  const nextPercentage = Math.max(Math.min(nextPercentageNotBound, 0), -100);
+  
+  track.dataset.percentage = nextPercentage;
+  track.animate({
+    transform: `translate(${nextPercentage}%, -50%)`
+  }, { duration: 600, fill: "forwards" });
+  
+  for (const image of track.getElementsByClassName("image")) {
+      image.animate({
+        objectPosition: `${100 + nextPercentage}% center`,
+      }, { duration: 600, fill: "forwards" });
+  }
+
+};
