@@ -21,8 +21,6 @@ function setNextPercentage(delta, maxDelta) {
   }
 };
 
-// When calling centerOnImage, pass the scale factor
-
 const isDragging = (e) => {
   const deltaThreshold = 5;
   const timeThreshold = 200;
@@ -54,7 +52,6 @@ function handleMouseUp(e) {
     focusClosest();
   } 
   
-  // Always reset these values on mouse up
   track.dataset.mouseDownAt = "0";
   track.dataset.prevPercentage = track.dataset.percentage;
   document.body.classList.remove("no-select");
@@ -74,7 +71,6 @@ function handleMouseMove(e) {
 
 let cumulativeScrollDelta = 0; // This will accumulate the scroll delta
 let scrollTimeout;
-
 function handleScroll(e) {
   if (hasFocused) {
     return;
@@ -206,11 +202,11 @@ function expandImage(image) {
   image.style.transition = 'width 0.6s ease, height 0.6s ease, z-index 0.6s ease'; 
 
   window.addEventListener('click', () => {
-    revertImage(image);
+    unfocusImage(image);
   }, { once: true });
 }
 
-function revertImage(image) {
+function unfocusImage(image) {
   document.getElementById("x-hair").animate({
     opacity: "100%"
   }, { duration: 600, fill: "forwards" });
@@ -225,5 +221,6 @@ function revertImage(image) {
   image.style.zIndex = '';
   image.style.width = '40vmin';
   image.style.height = '56vmin';
+  hasFocused = false;
 }
 
