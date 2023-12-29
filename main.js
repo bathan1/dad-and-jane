@@ -159,7 +159,6 @@ function buildThresholdList() {
 updateCount();
 
 function focusImage(delta, imageToExpand) {
-  // Adjust centering calculation to account for the scale factor
   const maxDelta = track.scrollWidth;
   const percentage = (delta / maxDelta) * -100;
   const nextPercentageNotBound = parseFloat(track.dataset.prevPercentage) + percentage;
@@ -202,12 +201,10 @@ function expandImage(image) {
   image.style.width = "80vmin";
 
   const newRect = image.getBoundingClientRect();
-  const newRectCenterX = newRect.left + newRect.width / 2;
+  const newRectCenterX = image.getBoundingClientRect().left + image.getBoundingClientRect().width / 2;
 
   const centerDiff = centerX - newRectCenterX;
   image.style.transform = `translateX(${centerDiff}px)`;
-
-  image.style.transition = "width 0.6s ease, transform 0.6s ease";
 
   window.addEventListener('click', () => {
     unfocusImage(image);
@@ -228,6 +225,6 @@ function unfocusImage(image) {
   image.style.width = '40vmin';
   image.style.height = '56vmin';
   image.style.transform = 'none';
+
   hasFocused = false;
 }
-
