@@ -198,6 +198,7 @@ function expandImage(image) {
   const rect = image.getBoundingClientRect();
   const centerX = rect.left + rect.width / 2;
 
+  image.style.zIndex = "3";
   image.style.width = "80vmin";
 
   const newRect = image.getBoundingClientRect();
@@ -226,6 +227,7 @@ function unfocusImage(image) {
   image.style.zIndex = '';
   image.style.width = '40vmin';
   image.style.height = '56vmin';
+  image.style.transform = 'none';
   hasFocused = false;
 }
 
