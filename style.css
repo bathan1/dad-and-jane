@@ -78,12 +78,9 @@ nav {
   padding: 16px;
 }
 
-.blur-effect {
-  filter: blur(5px);
-  transition: filter 1s ease;
+.unexpanded {
+
 }
 
-.unblur {
-  filter: blur(0px);
-  transition: filter 1s ease;
+.expand {
 }

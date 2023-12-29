@@ -175,11 +175,10 @@ function focusImage(delta, imageToExpand) {
 
 
   for (const image of track.getElementsByClassName("image")) {
-    image.classList.remove("unblur");
     if (image !== imageToExpand) {
-      image.classList.add("blur-effect");
       image.animate({
-        objectPosition: `${100 + nextPercentage}% center`
+        objectPosition: `${100 + nextPercentage}% center`,
+        opacity: "0%"
       }, { duration: 600, fill: "forwards" });
     } else {
       image.animate({
@@ -215,11 +214,10 @@ function unfocusImage(image) {
   document.getElementById("x-hair").animate({
     opacity: "100%"
   }, { duration: 600, fill: "forwards" });
-  for (const image of track.getElementsByClassName("image")) {
-    if (image.classList.contains("blur-effect")) {
-      image.classList.add("unblur");
-    }
-    image.classList.remove("blur-effect");
+  for (const img of track.getElementsByClassName("image")) {
+    img.animate({
+      opacity: "100%"
+    }, { duration: 600, fill: "forwards" }) 
   }
   image.style.zIndex = '';
   image.style.width = '40vmin';
