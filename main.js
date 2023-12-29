@@ -95,7 +95,7 @@ function updateCount() {
 
   // If we found a closest image, update the counter
   if (currClosestIndex !== -1) {
-    document.getElementById("image-counter").innerHTML = `K-0${1 + currClosestIndex}`;
+    document.getElementById("image-counter").innerHTML = `${1 + currClosestIndex}-5`;
     closestIndex = currClosestIndex;
   }
 }
@@ -184,16 +184,23 @@ function revertImage(image) {
   image.style.zIndex = '';
   image.style.width = '40vmin';
   image.style.height = '56vmin';
+
+  isCentered = false;
 }
 
 // When calling centerOnImage, pass the scale factor
 const scaleFactor = 1.5;
 let isCentered = false;
 track.onclick = () => {
-  const imageToExpand = images[closestIndex];
-  const centerX = window.innerWidth * 0.5; // Center of the viewport
-  const rect = imageToExpand.getBoundingClientRect();
-  const entryCenterX = rect.left + (rect.width / 2);
-  const delta = (centerX - entryCenterX) * -1;
-  centerOnImage(delta, imageToExpand, scaleFactor);
+  const focused = images[closestIndex];
+  if (!isCentered) {
+    const centerX = window.innerWidth * 0.5; // Center of the viewport
+    const rect = focused.getBoundingClientRect();
+    const entryCenterX = rect.left + (rect.width / 2);
+    const delta = (centerX - entryCenterX) * -1;
+    centerOnImage(delta, focused, scaleFactor);
+    isCentered = true;
+  } else {
+    revertImage(focused);
+  }
 };
