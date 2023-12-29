@@ -33,9 +33,9 @@ const focusClosest = () => {
   const focused = images[closestIndex];
   const centerX = window.innerWidth * 0.5;
   const rect = focused.getBoundingClientRect();
-  const entryCenterX = rect.left + (rect.width / 2);
-  const delta = (centerX - entryCenterX) * -1;
-  centerOnImage(delta, focused);
+  const focusedCenterX = rect.left + (rect.width / 2);
+  const delta = (centerX - focusedCenterX) * -1;
+  focusImage(delta, focused);
   hasFocused = true;
 }
 
@@ -122,8 +122,8 @@ function updateCount() {
   // Loop through all images, not just the ones in 'entries'
   Array.from(images).forEach((image, index) => {
     const rect = image.getBoundingClientRect();
-    const entryCenterX = rect.left + (rect.width / 2);
-    const dist = Math.abs(entryCenterX - centerX);
+    const imageCenterX = rect.left + (rect.width / 2);
+    const dist = Math.abs(imageCenterX - centerX);
     if (dist < currClosestDist) {
       currClosestDist = dist;
       currClosestIndex = index; // Directly use the loop index
@@ -158,7 +158,7 @@ function buildThresholdList() {
 // Call updateCount initially to set the counter at the start
 updateCount();
 
-function centerOnImage(delta, imageToExpand) {
+function focusImage(delta, imageToExpand) {
   // Adjust centering calculation to account for the scale factor
   const maxDelta = track.scrollWidth;
   const percentage = (delta / maxDelta) * -100;
@@ -167,7 +167,7 @@ function centerOnImage(delta, imageToExpand) {
   
   track.dataset.percentage = nextPercentage;
   track.animate({
-    transform: `translate(${nextPercentage}%, -50%)`
+    transform: `translate(${nextPercentage}%, -50%)`,
   }, { duration: 600, fill: "forwards" });
   
   document.getElementById("x-hair").animate({
@@ -195,11 +195,18 @@ function centerOnImage(delta, imageToExpand) {
 };
 
 function expandImage(image) {
-  image.style.width = "56vmin";
-  image.style.height = "auto";
-  image.style.zIndex = '1000';
-  image.style.objectFit = "contain";
-  image.style.transition = 'width 0.6s ease, height 0.6s ease, z-index 0.6s ease'; 
+  const rect = image.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+
+  image.style.width = "80vmin";
+
+  const newRect = image.getBoundingClientRect();
+  const newRectCenterX = newRect.left + newRect.width / 2;
+
+  const centerDiff = centerX - newRectCenterX;
+  image.style.transform = `translateX(${centerDiff}px)`;
+
+  image.style.transition = "width 0.6s ease, transform 0.6s ease";
 
   window.addEventListener('click', () => {
     unfocusImage(image);
@@ -216,8 +223,6 @@ function unfocusImage(image) {
     }
     image.classList.remove("blur-effect");
   }
-  image.style.objectFit = "cover";
-  image.style.transform = `scale(1)`;
   image.style.zIndex = '';
   image.style.width = '40vmin';
   image.style.height = '56vmin';
