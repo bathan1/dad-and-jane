@@ -18,13 +18,54 @@ function setNextPercentage(delta) {
   }
 };
 
+let isDragging = false;
+let clickStart = 0;
+const clickThreshold = 5;
+const timeThreshold = 200;
+//
+// When calling centerOnImage, pass the scale factor
+const scaleFactor = 1.5;
+let isCentered = false;
+
 function handleMouseDown(e) {
   track.dataset.mouseDownAt = e.clientX;
+  isDragging = false;
+  clickStart = Date.now();
+  
+  document.body.classList.add("no-select");
 }
 
-function handleMouseUp() {
-  track.dataset.mouseDownAt = "0";  
+const checkTypeClick = (e) => {
+  const clickDuration = Date.now()- clickStart;
+  const mouseDelta = Math.abs(parseFloat(track.dataset.mouseDownAt) - e.clientX);
+  return mouseDelta < clickThreshold && clickDuration < timeThreshold;
+}
+
+function handleMouseUp(e) {
+  const wasDragging = isDragging;
+  isDragging = false;  // Reset dragging state
+
+  if (!wasDragging) {
+    // If it was not a dragging action, it's a click
+    isCentered = !isCentered;  // Toggle centered state
+    if (isCentered) {
+      // Center the image
+      const focused = images[closestIndex];
+      const centerX = window.innerWidth * 0.5;
+      const rect = focused.getBoundingClientRect();
+      const entryCenterX = rect.left + (rect.width / 2);
+      const delta = (centerX - entryCenterX) * -1;
+      centerOnImage(delta, focused, scaleFactor);
+    } else {
+      // Revert the focused image
+      revertImage(images[closestIndex]);
+    }
+  }
+
+  // Always reset these values on mouse up
+  track.dataset.mouseDownAt = "0";
   track.dataset.prevPercentage = track.dataset.percentage;
+  document.body.classList.remove("no-select");
 }
 
 function handleMouseMove(e) {
@@ -32,6 +73,9 @@ function handleMouseMove(e) {
     return;
   }
   const mouseDelta = parseFloat(track.dataset.mouseDownAt) - e.clientX;
+  if (mouseDelta > clickThreshold) {
+    isDragging = true;
+  }
   setNextPercentage(mouseDelta);
 }
 
@@ -68,7 +112,9 @@ function handleScroll(e) {
 
 // Bind event listeners to window
 window.addEventListener("wheel", handleScroll);
-window.addEventListener("mousedown", handleMouseDown); window.addEventListener("mouseup", handleMouseUp); window.addEventListener("mousemove", handleMouseMove);
+window.addEventListener("mousedown", handleMouseDown)
+window.addEventListener("mouseup", handleMouseUp); 
+window.addEventListener("mousemove", handleMouseMove);
 
 // Add touch capabilities
 window.ontouchstart = e => handleMouseDown(e.touches[0]);
@@ -156,6 +202,7 @@ function centerOnImage(delta, imageToExpand, scaleFactor = 1) {
   setTimeout(() => {
     expandImage(imageToExpand, scaleFactor);
   }, 600); // Start expanding after the centering animation completes
+  isCentered = true;
 };
 
 function expandImage(image, scaleFactor) {
@@ -184,23 +231,6 @@ function revertImage(image) {
   image.style.zIndex = '';
   image.style.width = '40vmin';
   image.style.height = '56vmin';
-
   isCentered = false;
 }
 
-// When calling centerOnImage, pass the scale factor
-const scaleFactor = 1.5;
-let isCentered = false;
-track.onclick = () => {
-  const focused = images[closestIndex];
-  if (!isCentered) {
-    const centerX = window.innerWidth * 0.5; // Center of the viewport
-    const rect = focused.getBoundingClientRect();
-    const entryCenterX = rect.left + (rect.width / 2);
-    const delta = (centerX - entryCenterX) * -1;
-    centerOnImage(delta, focused, scaleFactor);
-    isCentered = true;
-  } else {
-    revertImage(focused);
-  }
-};
