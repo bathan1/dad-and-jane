@@ -18,50 +18,39 @@ function setNextPercentage(delta) {
   }
 };
 
-let isDragging = false;
-let clickStart = 0;
-const clickThreshold = 5;
-const timeThreshold = 200;
-//
 // When calling centerOnImage, pass the scale factor
 const scaleFactor = 1.5;
-let isCentered = false;
-
 function handleMouseDown(e) {
   track.dataset.mouseDownAt = e.clientX;
   isDragging = false;
   clickStart = Date.now();
-  
   document.body.classList.add("no-select");
 }
 
-const checkTypeClick = (e) => {
-  const clickDuration = Date.now()- clickStart;
+let isDragging = false;
+let clickStart = 0;
+const clickThreshold = 5;
+const timeThreshold = 200;
+const checkIfDragging = (e) => {
+  const clickDuration = Date.now() - clickStart;
   const mouseDelta = Math.abs(parseFloat(track.dataset.mouseDownAt) - e.clientX);
-  return mouseDelta < clickThreshold && clickDuration < timeThreshold;
+  return mouseDelta > clickThreshold || clickDuration > timeThreshold;
+}
+
+const focusClosest = () => {
+  const focused = images[closestIndex];
+  const centerX = window.innerWidth * 0.5;
+  const rect = focused.getBoundingClientRect();
+  const entryCenterX = rect.left + (rect.width / 2);
+  const delta = (centerX - entryCenterX) * -1;
+  centerOnImage(delta, focused, scaleFactor);
 }
 
 function handleMouseUp(e) {
-  const wasDragging = isDragging;
-  isDragging = false;  // Reset dragging state
-
-  if (!wasDragging) {
-    // If it was not a dragging action, it's a click
-    isCentered = !isCentered;  // Toggle centered state
-    if (isCentered) {
-      // Center the image
-      const focused = images[closestIndex];
-      const centerX = window.innerWidth * 0.5;
-      const rect = focused.getBoundingClientRect();
-      const entryCenterX = rect.left + (rect.width / 2);
-      const delta = (centerX - entryCenterX) * -1;
-      centerOnImage(delta, focused, scaleFactor);
-    } else {
-      // Revert the focused image
-      revertImage(images[closestIndex]);
-    }
-  }
-
+  isDragging = checkIfDragging(e);
+  if (!isDragging) {
+    focusClosest();
+  } 
   // Always reset these values on mouse up
   track.dataset.mouseDownAt = "0";
   track.dataset.prevPercentage = track.dataset.percentage;
@@ -202,7 +191,6 @@ function centerOnImage(delta, imageToExpand, scaleFactor = 1) {
   setTimeout(() => {
     expandImage(imageToExpand, scaleFactor);
   }, 600); // Start expanding after the centering animation completes
-  isCentered = true;
 };
 
 function expandImage(image, scaleFactor) {
@@ -223,7 +211,9 @@ function revertImage(image) {
     opacity: "100%"
   }, { duration: 600, fill: "forwards" });
   for (const image of track.getElementsByClassName("image")) {
-    image.classList.add("unblur");
+    if (image.classList.contains("blur-effect")) {
+      image.classList.add("unblur");
+    }
     image.classList.remove("blur-effect");
   }
   image.style.objectFit = "cover";
@@ -231,6 +221,5 @@ function revertImage(image) {
   image.style.zIndex = '';
   image.style.width = '40vmin';
   image.style.height = '56vmin';
-  isCentered = false;
 }
 
