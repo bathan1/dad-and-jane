@@ -1,11 +1,14 @@
 const track = document.getElementById("image-track");
 
-function setNextPercentage(delta) {
-  const maxDelta = window.innerWidth / 2;
+function calcNextPercentage(delta, maxDelta) {
   const percentage = (delta / maxDelta) * -100;
   const nextPercentageNotBound = parseFloat(track.dataset.prevPercentage) + percentage;
   const nextPercentage = Math.max(Math.min(nextPercentageNotBound, 0), -100);
-  
+  return nextPercentage;
+}
+
+function setNextPercentage(delta, maxDelta) {
+  const nextPercentage = calcNextPercentage(delta, maxDelta);
   track.dataset.percentage = nextPercentage;
   track.animate({
     transform: `translate(${nextPercentage}%, -50%)`
@@ -19,22 +22,13 @@ function setNextPercentage(delta) {
 };
 
 // When calling centerOnImage, pass the scale factor
-const scaleFactor = 1.5;
-function handleMouseDown(e) {
-  track.dataset.mouseDownAt = e.clientX;
-  isDragging = false;
-  clickStart = Date.now();
-  document.body.classList.add("no-select");
-}
 
-let isDragging = false;
-let clickStart = 0;
-const clickThreshold = 5;
-const timeThreshold = 200;
-const checkIfDragging = (e) => {
+const isDragging = (e) => {
+  const deltaThreshold = 5;
+  const timeThreshold = 200;
   const clickDuration = Date.now() - clickStart;
   const mouseDelta = Math.abs(parseFloat(track.dataset.mouseDownAt) - e.clientX);
-  return mouseDelta > clickThreshold || clickDuration > timeThreshold;
+  return mouseDelta > deltaThreshold || clickDuration > timeThreshold;
 }
 
 const focusClosest = () => {
@@ -43,14 +37,23 @@ const focusClosest = () => {
   const rect = focused.getBoundingClientRect();
   const entryCenterX = rect.left + (rect.width / 2);
   const delta = (centerX - entryCenterX) * -1;
-  centerOnImage(delta, focused, scaleFactor);
+  centerOnImage(delta, focused);
+  hasFocused = true;
 }
 
+let clickStart = 0;
+function handleMouseDown(e) {
+  track.dataset.mouseDownAt = e.clientX;
+  clickStart = Date.now();
+  document.body.classList.add("no-select");
+}
+
+let hasFocused = false;
 function handleMouseUp(e) {
-  isDragging = checkIfDragging(e);
-  if (!isDragging) {
+  if (!isDragging(e) && !hasFocused) {
     focusClosest();
   } 
+  
   // Always reset these values on mouse up
   track.dataset.mouseDownAt = "0";
   track.dataset.prevPercentage = track.dataset.percentage;
@@ -58,20 +61,24 @@ function handleMouseUp(e) {
 }
 
 function handleMouseMove(e) {
-  if (track.dataset.mouseDownAt === "0") {
+  if (track.dataset.mouseDownAt === "0" || hasFocused) {
     return;
   }
-  const mouseDelta = parseFloat(track.dataset.mouseDownAt) - e.clientX;
-  if (mouseDelta > clickThreshold) {
-    isDragging = true;
+
+  if (isDragging(e)) {
+    const mouseDelta = parseFloat(track.dataset.mouseDownAt) - e.clientX;
+    const maxDelta = window.innerWidth / 2;
+    setNextPercentage(mouseDelta, maxDelta);
   }
-  setNextPercentage(mouseDelta);
 }
 
 let cumulativeScrollDelta = 0; // This will accumulate the scroll delta
 let scrollTimeout;
 
 function handleScroll(e) {
+  if (hasFocused) {
+    return;
+  }
   const scrollSensitivity = 0.33;
   
   // Accumulate the scroll delta
@@ -89,8 +96,7 @@ function handleScroll(e) {
   // Now to set the right bound by setting the maximum number we can scroll right to as maxDelta (by assigning min to scrollDelta)
   const maxDelta = window.innerWidth / 2;
   cumulativeScrollDelta = Math.min(cumulativeScrollDelta, maxDelta);
-
-  setNextPercentage(cumulativeScrollDelta);
+  setNextPercentage(cumulativeScrollDelta, maxDelta);
 
   clearTimeout(scrollTimeout);
   scrollTimeout = setTimeout(() => {
@@ -156,11 +162,10 @@ function buildThresholdList() {
 // Call updateCount initially to set the counter at the start
 updateCount();
 
-function centerOnImage(delta, imageToExpand, scaleFactor = 1) {
+function centerOnImage(delta, imageToExpand) {
   // Adjust centering calculation to account for the scale factor
-  const adjustedDelta = delta / scaleFactor;
   const maxDelta = track.scrollWidth;
-  const percentage = (adjustedDelta / maxDelta) * -100;
+  const percentage = (delta / maxDelta) * -100;
   const nextPercentageNotBound = parseFloat(track.dataset.prevPercentage) + percentage;
   const nextPercentage = Math.max(Math.min(nextPercentageNotBound, 0), -100);
   
@@ -189,17 +194,16 @@ function centerOnImage(delta, imageToExpand, scaleFactor = 1) {
   }
 
   setTimeout(() => {
-    expandImage(imageToExpand, scaleFactor);
+    expandImage(imageToExpand);
   }, 600); // Start expanding after the centering animation completes
 };
 
-function expandImage(image, scaleFactor) {
-  image.style.transform = `scale(${scaleFactor})`;
+function expandImage(image) {
   image.style.width = "56vmin";
   image.style.height = "auto";
   image.style.zIndex = '1000';
   image.style.objectFit = "contain";
-  image.style.transition = 'transform 0.6s ease, width 0.6s ease, height 0.6s ease, z-index 0.6s ease'; 
+  image.style.transition = 'width 0.6s ease, height 0.6s ease, z-index 0.6s ease'; 
 
   window.addEventListener('click', () => {
     revertImage(image);
