@@ -267,8 +267,9 @@ const getTextStyle = (closestIndex) => {
   switch (closestIndex) {
     case 0: return "korea-text";
     case 1: return "food-text";
+    case 2: return "wedding-text";
     case 3: return "selfies-text";
-    case 4: return "other-text";
+    case 4: return "final-text";
   }
 }
 

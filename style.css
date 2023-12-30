@@ -43,6 +43,7 @@ nav {
   font-size: 24px;
   width: fit-content;
   height: fit-content;
+  color: #000; 
 }
 
 .nav-text {
@@ -140,23 +141,31 @@ nav {
 }
 
 .korea-text {
-  color: black;
+  color: #002800;
 }
 
 .food-text {
   color: white;
   position: absolute;
-  top: 40%;
+  top: 75%;
+  left: 43%;
+}
+
+.wedding-text {
+  position: absolute;
+  top: 72%;
 }
 
 .selfies-text {
   color: white;
   position: absolute;
-  top: 10%;
+  top: 12%;
 }
 
-.other-text {
+.final-text {
   color: white;
+  position: absolute;
+  top: 33%;
 }
 
 #rest-of-images {
