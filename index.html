@@ -8,27 +8,31 @@
     <link href="./style.css" rel="stylesheet">
   </head>
   <body id="root">
-    <header>
-      <nav>
-        <div class="nav-div" id="korea-button">TO: DAD & JANE</div>  
-        <div class="nav-div inactive" id="letter-button">FROM: NATHAN</div>  
-      </nav>  
-    </header>
-    <img src="19.svg" alt="cross" id="x-hair"/>
-    <div id="image-text" class="text">
+
+    <div id="main-flex">
+      <header>
+        <nav>
+          <div class="nav-div" id="korea-button">TO: DAD & JANE</div>  
+          <div class="nav-div inactive" id="letter-button">FROM: NATHAN</div>  
+        </nav>  
+      </header>
+      <img src="19.svg" alt="cross" id="x-hair"/>
+      <div id="image-text" class="text">
+      </div>
+      <div id="image-track" data-mouse-down-at="0" data-percentage="0" data-prev-percentage="0">
+        <img class="image" src="korea/korea-one.JPEG" draggable="false" />
+        <img class="image" src="food/food-one.JPG" draggable="false" />
+        <img class="image" src="wedding/wedding-one.JPG" draggable="false" />
+        <img class="image" src="selfies/CROPPED/one.jpg" draggable="false" />
+        <img class="image" src="misc/misc-one.JPG" draggable="false" />
+      </div>
+      <div id="image-counter">
+        <span id="curr-img" class="odometer">;</span>
+        <span id="counter-separator">&nbsp;</span>
+        <span id="odometer-end">&nbsp;&nbsp;5</span>
+      </div>
     </div>
-    <div id="image-track" data-mouse-down-at="0" data-percentage="0" data-prev-percentage="0">
-      <img class="image" src="korea/korea-one.JPEG" draggable="false" />
-      <img class="image" src="food/food-one.JPG" draggable="false" />
-      <img class="image" src="wedding/wedding-one.JPG" draggable="false" />
-      <img class="image" src="selfies/CROPPED/one.jpg" draggable="false" />
-      <img class="image" src="misc/misc-one.JPG" draggable="false" />
-    </div>
-    <div id="image-counter">
-      <span id="curr-img" class="odometer">;</span>
-      <span id="counter-separator">&nbsp;</span>
-      <span id="odometer-end">&nbsp;&nbsp;5</span>
-    </div>
+
   </body>
   <script src="odometer.js"></script>
   <script src="main.js"></script>

@@ -11,15 +11,21 @@
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
   height: 100vh;
   width: 100vw;
   background-color: var(--bg-color);
   margin: 0rem;
   overflow: hidden;
+}
+
+#main-flex {
+  height: 100%;
+  width: 100%;
+  margin: 0rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 header {
