@@ -167,72 +167,54 @@ function focusImage(delta, imageToExpand) {
   track.dataset.percentage = nextPercentage;
   track.animate({
     transform: `translate(${nextPercentage}%, -50%)`,
-  }, { duration: 600, fill: "forwards" });
+  }, { duration: 150, fill: "forwards" });
   
   document.getElementById("x-hair").animate({
     opacity: `0%`
-  }, { duration: 600, fill: "forwards" });
-
+  }, { duration: 150, fill: "forwards" });
 
   for (const image of track.getElementsByClassName("image")) {
     if (image !== imageToExpand) {
       image.animate({
         objectPosition: `${100 + nextPercentage}% center`,
         opacity: "0%"
-      }, { duration: 600, fill: "forwards" });
+      }, { duration: 150, fill: "forwards" });
     } else {
       image.animate({
         objectPosition: "center"
-      }, { duration: 600, fill: "forwards" });
+      }, { duration: 150, fill: "forwards" });
     }
   }
 
   setTimeout(() => {
     expandImage(imageToExpand);
-  }, 600); // Start expanding after the centering animation completes
+  }, 0); // Start expanding after the centering animation completes
 };
 
-async function expandImage(image) { const rect = image.getBoundingClientRect();
-  const centerX = rect.left + rect.width / 2;
-
-  image.style.transition = "height 0.5s ease-in-out, width 0.5s ease-in-out";
-  image.style.width = "64vw";
-  image.style.height = "auto";
-
-  await waitForExpansion(image);
-  const newRectCenterX = image.getBoundingClientRect().left + image.getBoundingClientRect().width / 2;
-
-  const centerDiff = centerX - newRectCenterX;
-  image.style.transition = "transform 0.5s ease-in-out";
-  image.style.transform = `translateX(${centerDiff}px)`;
-
+function expandImage(image) { 
+  image.style.transition = "transform 0.5s ease";
+  image.style.transform = "scale(2.5)";
+  image.style.objectFit = "contain";
+  
   window.addEventListener('click', () => {
     unfocusImage(image);
   }, { once: true });
 }
 
-const waitForExpansion = async (image) => {
-  return new Promise(res => {
-    image.addEventListener('transitionend', function transitionEndHandler() {
-      image.removeEventListener('transitionend', transitionEndHandler);
-      res();
-    });
-  });
-}
-
 function unfocusImage(image) {
-  document.getElementById("x-hair").animate({
-    opacity: "100%"
-  }, { duration: 600, fill: "forwards" });
-  for (const img of track.getElementsByClassName("image")) {
-    img.animate({
+  image.style.transition = "transform 0.5s ease";
+  image.style.transform = "none";
+  image.style.objectFit = "cover";
+  setTimeout(() => {
+    document.getElementById("x-hair").animate({
       opacity: "100%"
-    }, { duration: 600, fill: "forwards" }) 
-  }
-  image.style.zIndex = '';
-  image.style.width = '40vmin';
-  image.style.height = '56vmin';
-  image.style.transform = 'none';
+    }, { duration: 450, fill: "forwards" });
+    for (const img of track.getElementsByClassName("image")) {
+      img.animate({
+        opacity: "100%"
+      }, { duration: 450, fill: "forwards" }) 
+    }
+  }, 0);
 
   hasFocused = false;
 }
