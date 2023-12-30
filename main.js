@@ -1,9 +1,9 @@
 const blurbs = {
   0: "KOREA",
-  1: "FOOD",
+  1: "FOOD (wow)",
   2: "WEDDING",
   3: "SELFIES (lol)",
-  4: "OTHER"
+  4: "to do"
 }
 const incrementer = document.getElementById("curr-img");
 const track = document.getElementById("image-track");
@@ -166,6 +166,14 @@ function buildThresholdList() {
 // Call updateCount initially to set the counter at the start
 updateCount();
 
+const actions = {
+  0: "traveled to",
+  1: "ate lots of",
+  2: "had a",
+  3: "took many",
+  4: "have so much more"
+}
+
 function moveRecipients() {
   const tempIgnoreList = document.querySelectorAll(".no-hl");
   for (let el of tempIgnoreList) {
@@ -173,6 +181,7 @@ function moveRecipients() {
     el.style.position = "absolute";
   }
 
+  document.getElementById("verb-span").innerText = actions[closestIndex];
   document.getElementById("verb-div").classList.add("reveal-text");
 }
 
@@ -212,7 +221,11 @@ function focusImage(delta, imageToExpand) {
 
 function expandImage(image) { 
   image.style.transition = "transform 0.5s ease";
-  image.style.transform = "scale(2.5)";
+  if (closestIndex !== 3) {
+    image.style.transform = "scale(2.5)";
+  } else {
+    image.style.transform = "scale(2.25)";
+  }
   image.style.objectFit = "contain";
 
   const textStyle = getTextStyle(closestIndex);
@@ -262,6 +275,12 @@ const getTextStyle = (closestIndex) => {
 function unfocusImage(image, textStyle) {
   const text = document.getElementById("image-text");
   text.classList.remove("visible");
+  
+  document.getElementById("verb-div").classList.remove("reveal-text");
+  for (const el of document.querySelectorAll(".no-hl")) {
+    el.classList.remove("invisible");
+    el.style.position = "static";
+  }
 
   setTimeout(() => {
     image.style.transition = "transform 0.5s ease";

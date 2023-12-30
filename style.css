@@ -64,7 +64,6 @@ nav {
   opacity: 0;
 }
 
-
 .no-select {
   -webkit-user-select: none; /* Chrome/Safari */
   -moz-user-select: none;    /* Firefox */
@@ -114,7 +113,7 @@ nav {
 
 .text {
   z-index: 5;
-  font-size: 28px;
+  font-size: 48px;
   cursor: pointer;
 
   opacity: 0;
@@ -167,11 +166,13 @@ nav {
 
 .pseudo-hidden {
   display: none;
+  position: relative;
 }
 
 .pseudo-hidden.reveal-text {
   display: block;
   text-align: center;
+  z-index: 6;
 }
 
 .pseudo-hidden.reveal-text span {
