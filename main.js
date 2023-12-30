@@ -166,8 +166,18 @@ function buildThresholdList() {
 // Call updateCount initially to set the counter at the start
 updateCount();
 
-function focusImage(delta, imageToExpand) {
+function moveRecipients() {
+  const tempIgnoreList = document.querySelectorAll(".no-hl");
+  for (let el of tempIgnoreList) {
+    el.classList.add("invisible");
+    el.style.position = "absolute";
+  }
 
+  document.getElementById("verb-div").classList.add("reveal-text");
+}
+
+function focusImage(delta, imageToExpand) {
+  moveRecipients();
   const maxDelta = track.scrollWidth;
   const percentage = (delta / maxDelta) * -100;
   const nextPercentageNotBound = parseFloat(track.dataset.prevPercentage) + percentage;
@@ -213,7 +223,7 @@ function expandImage(image) {
       text.classList.add(textStyle);
     }
     text.classList.add("visible");
-  }, 500);
+  }, 1250);
 
   window.addEventListener('keyup', escapeFocus, { once: true });
 
