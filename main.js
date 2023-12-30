@@ -195,15 +195,15 @@ function focusImage(delta, imageToExpand) {
 async function expandImage(image) { const rect = image.getBoundingClientRect();
   const centerX = rect.left + rect.width / 2;
 
-  image.style.transition= "width 0.5s ease-in-out";
-  image.style.zIndex = "3";
-  image.style.width = "80vmin";
+  image.style.transition = "height 0.5s ease-in-out, width 0.5s ease-in-out";
+  image.style.width = "64vw";
+  image.style.height = "auto";
 
   await waitForExpansion(image);
-  const newRect = image.getBoundingClientRect();
   const newRectCenterX = image.getBoundingClientRect().left + image.getBoundingClientRect().width / 2;
 
   const centerDiff = centerX - newRectCenterX;
+  image.style.transition = "transform 0.5s ease-in-out";
   image.style.transform = `translateX(${centerDiff}px)`;
 
   window.addEventListener('click', () => {
