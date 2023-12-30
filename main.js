@@ -192,13 +192,14 @@ function focusImage(delta, imageToExpand) {
   }, 600); // Start expanding after the centering animation completes
 };
 
-function expandImage(image) {
-  const rect = image.getBoundingClientRect();
+async function expandImage(image) { const rect = image.getBoundingClientRect();
   const centerX = rect.left + rect.width / 2;
 
+  image.style.transition= "width 0.5s ease-in-out";
   image.style.zIndex = "3";
   image.style.width = "80vmin";
 
+  await waitForExpansion(image);
   const newRect = image.getBoundingClientRect();
   const newRectCenterX = image.getBoundingClientRect().left + image.getBoundingClientRect().width / 2;
 
@@ -208,6 +209,15 @@ function expandImage(image) {
   window.addEventListener('click', () => {
     unfocusImage(image);
   }, { once: true });
+}
+
+const waitForExpansion = async (image) => {
+  return new Promise(res => {
+    image.addEventListener('transitionend', function transitionEndHandler() {
+      image.removeEventListener('transitionend', transitionEndHandler);
+      res();
+    });
+  });
 }
 
 function unfocusImage(image) {
