@@ -6,6 +6,8 @@
 
 :root {
   font-family: 'TimesNewRomanMTStd-BoldCond', Times New Roman, serif;
+  --bg-color: #faf0e6;
+  --text: #000;
 }
 
 body {
@@ -15,13 +17,13 @@ body {
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background-color: #faf0e6;
+  background-color: var(--bg-color);
   margin: 0rem;
   overflow: hidden;
 }
 
 header {
-  color: #000000;
+  color: black;
 }
 
 nav {
@@ -69,11 +71,11 @@ nav {
   top: 50%;  /* Center vertically, adjust as needed */
   left: 50%; /* Center horizontally, adjust as needed */
   transform: translate(-50%, -50%); /* This ensures it centers exactly where you want it */
-  z-index: 10;
+  z-index: 4;
 }
 
 #image-counter {
-  color: #000000;
+  color: #000;
   font-size: 18px;
   padding: 16px;
   display: flex;
@@ -84,4 +86,44 @@ nav {
   content: '---'; /* Adjust the number of '-' symbols as needed */
   letter-spacing: -1.5px; /* Adjust spacing to make them connected */
   white-space: nowrap; /* Prevent the line from breaking */
+}
+
+.text {
+  z-index: 5;
+  font-size: 28px;
+  cursor: pointer;
+
+  opacity: 0;
+  transform: translateY(20px);
+  transition: transform 1s ease, opacity 0.5s ease;
+}
+
+.text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.text:hover {
+  font-size: 40px;
+  transition: font-size 0.2s linear;
+}
+
+.korea-text {
+  color: black;
+}
+
+.food-text {
+  color: white;
+  position: absolute;
+  top: 40%;
+}
+
+.selfies-text {
+  color: white;
+  position: absolute;
+  top: 10%;
+}
+
+.other-text {
+  color: white;
 }

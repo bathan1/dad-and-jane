@@ -1,6 +1,11 @@
+const blurbs = {
+  0: "KOREA",
+  1: "FOOD",
+  2: "WEDDING",
+  3: "SELFIES (lol)",
+  4: "OTHER"
+}
 const incrementer = document.getElementById("curr-img");
-
-
 const track = document.getElementById("image-track");
 
 function calcNextPercentage(delta, maxDelta) {
@@ -170,22 +175,22 @@ function focusImage(delta, imageToExpand) {
   track.dataset.percentage = nextPercentage;
   track.animate({
     transform: `translate(${nextPercentage}%, -50%)`,
-  }, { duration: 150, fill: "forwards" });
+  }, { duration: 400, fill: "forwards" });
   
   document.getElementById("x-hair").animate({
     opacity: `0%`
-  }, { duration: 150, fill: "forwards" });
+  }, { duration: 400, fill: "forwards" });
 
   for (const image of track.getElementsByClassName("image")) {
     if (image !== imageToExpand) {
       image.animate({
         objectPosition: `${100 + nextPercentage}% center`,
         opacity: "0%"
-      }, { duration: 150, fill: "forwards" });
+      }, { duration: 400, fill: "forwards" });
     } else {
       image.animate({
         objectPosition: "center"
-      }, { duration: 150, fill: "forwards" });
+      }, { duration: 400, fill: "forwards" });
     }
   }
 
@@ -198,16 +203,39 @@ function expandImage(image) {
   image.style.transition = "transform 0.5s ease";
   image.style.transform = "scale(2.5)";
   image.style.objectFit = "contain";
-  
+
+  const textStyle = getTextStyle(closestIndex);
+  setTimeout(() => {
+    const text = document.getElementById("image-text");
+    text.innerHTML = blurbs[closestIndex];
+    if (textStyle) {
+      text.classList.add(textStyle);
+    }
+    text.classList.add("visible");
+  }, 500);
+
   window.addEventListener('click', () => {
-    unfocusImage(image);
+    unfocusImage(image, textStyle);
   }, { once: true });
 }
 
-function unfocusImage(image) {
+const getTextStyle = (closestIndex) => {
+  switch (closestIndex) {
+    case 0: return "korea-text";
+    case 1: return "food-text";
+    case 3: return "selfies-text";
+    case 4: return "other-text";
+  }
+}
+
+function unfocusImage(image, textStyle) {
+  const text = document.getElementById("image-text");
+  text.classList.remove("visible");
+
   image.style.transition = "transform 0.5s ease";
   image.style.transform = "none";
   image.style.objectFit = "cover";
+
   setTimeout(() => {
     document.getElementById("x-hair").animate({
       opacity: "100%"
@@ -218,6 +246,10 @@ function unfocusImage(image) {
       }, { duration: 450, fill: "forwards" }) 
     }
   }, 0);
+
+  setTimeout(() => {
+    text.classList.remove(textStyle);
+  }, 500);
 
   hasFocused = false;
 }
