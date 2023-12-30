@@ -215,17 +215,29 @@ function expandImage(image) {
     text.classList.add("visible");
   }, 500);
 
-  window.addEventListener('keyup', (e) => {
-    if (e.key === "Escape") {
-      unfocusImage(image, textStyle);
-    }
-  }, { once: true });
+  window.addEventListener('keyup', escapeFocus, { once: true });
 
   text.addEventListener('click', handleTextClick);
 }
 
+function escapeFocus(e) {
+  if (e.key === "Escape") {
+    unfocusImage(images[closestIndex], getTextStyle(closestIndex));
+  }
+}
+
 const handleTextClick = (e) => {
-  console.log(e);
+  window.removeEventListener('keyup', escapeFocus);
+  const restOfImages = document.getElementById("rest-of-images");
+  restOfImages.scrollIntoView({ behavior: "smooth" });
+}
+
+/**
+  * Function to return back to the thumbnail image from the gallery.
+  */
+const handleBackThumbnailClick = (e) => {
+  document.getElementById("main-flex").scrollIntoView({ behavior: "smooth" });
+  window.addEventListener("keyup", escapeFocus, { once: true }); // Add back escape button to return to gallery.
 }
 
 const getTextStyle = (closestIndex) => {
@@ -241,9 +253,11 @@ function unfocusImage(image, textStyle) {
   const text = document.getElementById("image-text");
   text.classList.remove("visible");
 
-  image.style.transition = "transform 0.5s ease";
-  image.style.transform = "none";
-  image.style.objectFit = "cover";
+  setTimeout(() => {
+    image.style.transition = "transform 0.5s ease";
+    image.style.transform = "none";
+    image.style.objectFit = "cover";
+  }, 100);
 
   setTimeout(() => {
     document.getElementById("x-hair").animate({
@@ -254,7 +268,7 @@ function unfocusImage(image, textStyle) {
         opacity: "100%"
       }, { duration: 450, fill: "forwards" }) 
     }
-  }, 0);
+  }, 100);
 
   setTimeout(() => {
     text.classList.remove(textStyle);

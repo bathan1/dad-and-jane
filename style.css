@@ -111,9 +111,15 @@ nav {
   transform: translateY(0);
 }
 
-.text:hover {
-  font-size: 40px;
-  transition: font-size 0.2s linear;
+.text.change-content .content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: transform 1s ease, opacity 0.5s ease;
+}
+
+.text.change-content.visible .content {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .korea-text {
@@ -134,4 +140,9 @@ nav {
 
 .other-text {
   color: white;
+}
+
+#rest-of-images {
+  min-width: 100vw;
+  min-height: 100vh;
 }
