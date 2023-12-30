@@ -4,6 +4,7 @@
     <title></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./odometer-theme-default.css" rel="stylesheet">
     <link href="./style.css" rel="stylesheet">
   </head>
   <body id="root">
@@ -21,7 +22,12 @@
       <img class="image" src="selfies/CROPPED/one.jpg" draggable="false" />
       <img class="image" src="misc/misc-one.JPG" draggable="false" />
     </div>
-    <div id="image-counter" class="odometer"></div>
+    <div id="image-counter">
+      <span id="curr-img" class="odometer">;</span>
+      <span id="counter-separator">&nbsp;</span>
+      <span id="odometer-end">&nbsp;&nbsp;5</span>
+    </div>
   </body>
+  <script src="odometer.js"></script>
   <script src="main.js"></script>
 </html>

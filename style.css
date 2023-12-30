@@ -74,6 +74,14 @@ nav {
 
 #image-counter {
   color: #000000;
-  font-size: 24px;
+  font-size: 18px;
   padding: 16px;
+  display: flex;
+  align-items: center;
+}
+
+#counter-separator:after {
+  content: '---'; /* Adjust the number of '-' symbols as needed */
+  letter-spacing: -1.5px; /* Adjust spacing to make them connected */
+  white-space: nowrap; /* Prevent the line from breaking */
 }

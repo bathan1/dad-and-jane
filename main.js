@@ -1,3 +1,6 @@
+const incrementer = document.getElementById("curr-img");
+
+
 const track = document.getElementById("image-track");
 
 function calcNextPercentage(delta, maxDelta) {
@@ -132,7 +135,7 @@ function updateCount() {
 
   // If we found a closest image, update the counter
   if (currClosestIndex !== -1) {
-    document.getElementById("image-counter").innerHTML = `${1 + currClosestIndex}-5`;
+    document.getElementById("curr-img").innerHTML = 1 + currClosestIndex;
     closestIndex = currClosestIndex;
   }
 }
