@@ -167,6 +167,7 @@ function buildThresholdList() {
 updateCount();
 
 function focusImage(delta, imageToExpand) {
+
   const maxDelta = track.scrollWidth;
   const percentage = (delta / maxDelta) * -100;
   const nextPercentageNotBound = parseFloat(track.dataset.prevPercentage) + percentage;
@@ -205,8 +206,8 @@ function expandImage(image) {
   image.style.objectFit = "contain";
 
   const textStyle = getTextStyle(closestIndex);
+  const text = document.getElementById("image-text");
   setTimeout(() => {
-    const text = document.getElementById("image-text");
     text.innerHTML = blurbs[closestIndex];
     if (textStyle) {
       text.classList.add(textStyle);
@@ -214,9 +215,17 @@ function expandImage(image) {
     text.classList.add("visible");
   }, 500);
 
-  window.addEventListener('click', () => {
-    unfocusImage(image, textStyle);
+  window.addEventListener('keyup', (e) => {
+    if (e.key === "Escape") {
+      unfocusImage(image, textStyle);
+    }
   }, { once: true });
+
+  text.addEventListener('click', handleTextClick);
+}
+
+const handleTextClick = (e) => {
+  console.log(e);
 }
 
 const getTextStyle = (closestIndex) => {
