@@ -391,11 +391,11 @@ function handleTextClick(e) {
   */
 async function handleBackButtonClick(e) {
   await scrollBackToThumbnail();
-  window.addEventListener("mousedown", handleMouseDown)
-  window.addEventListener("mouseup", handleMouseUp); 
-  window.addEventListener("mousemove", handleMouseMove);
   setTimeout(() => {
     window.addEventListener("click", escapeFocus); // Add back escape button to return to gallery.
+    window.addEventListener("mousedown", handleMouseDown)
+    window.addEventListener("mouseup", handleMouseUp); 
+    window.addEventListener("mousemove", handleMouseMove);
   }, 500)
   for (const image of document.querySelectorAll(".image-gallery")) {
     image.classList.add("hidden"); 
