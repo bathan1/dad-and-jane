@@ -372,7 +372,6 @@ function handleTextClick(e) {
   const galleryContainer = document.getElementById("gallery");
   galleryContainer.scrollIntoView({ behavior: "smooth" });  
   const galleryId = imageProps[imageIndex].galleryId;
-  console.log(galleryId);
   document.getElementById(galleryId).classList.remove("hidden");
 
   window.removeEventListener("click", escapeFocus);
@@ -380,9 +379,10 @@ function handleTextClick(e) {
   window.removeEventListener("mouseup", handleMouseUp); 
   window.removeEventListener("mousemove", handleMouseMove);
 
-  document.getElementById("back-button").addEventListener("click", handleBackButtonClick);
   window.focus();
 }
+
+document.getElementById("back-button").addEventListener("click", handleBackButtonClick);
 
 /**
   * Function to return back to the thumbnail image from the gallery.
