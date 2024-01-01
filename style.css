@@ -16,6 +16,7 @@ body {
   background-color: var(--bg-color);
   margin: 0rem;
   overflow: hidden;
+  overscroll-behavior-x: none;
 }
 
 #main-flex {
@@ -44,6 +45,7 @@ nav {
   width: fit-content;
   height: fit-content;
   color: #000; 
+  text-align: center;
 }
 
 .nav-text {
