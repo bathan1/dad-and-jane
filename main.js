@@ -274,7 +274,6 @@ function escapeFocus(e) {
 }
 
 const handleTextClick = (e, currGalleryIndex) => {
-  console.log(currGalleryIndex);
   const galleryContainer = document.getElementById("gallery");
   galleryContainer.scrollIntoView({ behavior: "smooth" });  
   const galleryId = galleryIndex[currGalleryIndex];
@@ -285,19 +284,24 @@ const handleTextClick = (e, currGalleryIndex) => {
   window.removeEventListener("mouseup", handleMouseUp); 
   window.removeEventListener("mousemove", handleMouseMove);
 
-  window.addEventListener("click", handleBackThumbnailClick);
+  document.getElementById("back-button").addEventListener("click", (e) => handleBackThumbnailClick(e, galleryId));
   window.focus();
 }
 
 /**
   * Function to return back to the thumbnail image from the gallery.
+  * @param e the Event object
+  * @param {string} galleryId the id of the gallery
   */
-const handleBackThumbnailClick = (e, currGalleryIndex) => {
+const handleBackThumbnailClick = (e, galleryId) => {
   document.getElementById("main-flex").scrollIntoView({ behavior: "smooth" });
-  window.addEventListener("click", escapeFocus); // Add back escape button to return to gallery.
   window.addEventListener("mousedown", handleMouseDown)
   window.addEventListener("mouseup", handleMouseUp); 
   window.addEventListener("mousemove", handleMouseMove);
+  setTimeout(() => {
+    window.addEventListener("click", escapeFocus); // Add back escape button to return to gallery.
+  }, 500)
+  document.getElementById(galleryId).classList.add("hidden");
 }
 
 const getTextStyle = (closestIndex) => {
