@@ -238,7 +238,7 @@ function expandImage(image) {
   image.style.objectFit = "contain";
 
   const textContainer = document.getElementById("image-text-container");
-  textContainer.classList = "";
+  textContainer.classList.remove("hidden");
   const text = document.getElementById("image-text");
   const textSup = document.getElementById("image-hover-sup");
 
@@ -246,9 +246,9 @@ function expandImage(image) {
   const superscript = numGalleryImages[closestIndex];
   setTimeout(() => {
     text.innerHTML = blurbs[closestIndex];
-    textSup.innerHTML = superscript;
     if (textStyle) {
       textContainer.classList.add(textStyle);
+      textSup.innerHTML = superscript;
     }
     text.classList.add("visible");
   }, 1250);
@@ -317,5 +317,6 @@ function unfocusImage(image, textStyle) {
   }, 100);
 
   document.getElementById("image-text-container").classList.add("hidden");
+  document.getElementById("image-text-container").classList.remove(textStyle);
   hasFocused = false;
 }
