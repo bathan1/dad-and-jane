@@ -1,11 +1,3 @@
-const actions = {
-  0: "traveled to",
-  1: "ate a bunch of",
-  2: "had a",
-  3: "took many",
-  4: "have so much more"
-}
-
 const imageProps = {
   0: {
     title: "KOREA",
@@ -39,30 +31,6 @@ const imageProps = {
   },
 
 };
-
-const blurbs = {
-  0: "KOREA",
-  1: "FOOD (wow)",
-  2: "WEDDING",
-  3: "SELFIES (lol)",
-  4: "to do"
-}
-
-const numGalleryImages = {
-  0: 5,
-  1: 2,
-  2: 3,
-  3: 4,
-  4: 3,
-}
-
-const galleryIndex = {
-  0: "korea-gallery",
-  1: "food-gallery",
-  2: "wedding-gallery",
-  3: "selfies-gallery",
-  4: "todo-gallery"
-}
 
 const incrementer = document.getElementById("curr-img");
 const track = document.getElementById("image-track");
@@ -288,7 +256,7 @@ function centerDadAndJaneText(currImage) {
   }
 
   const imageIndex = getIndex(currImage);
-  document.getElementById("verb-span").innerText = actions[imageIndex];
+  document.getElementById("verb-span").innerText = imageProps[imageIndex].actionText;
   document.getElementById("verb-div").classList.add("reveal-text");
 }
 
