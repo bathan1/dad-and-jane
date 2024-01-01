@@ -318,5 +318,6 @@ function unfocusImage(image, textStyle) {
 
   document.getElementById("image-text-container").classList.add("hidden");
   document.getElementById("image-text-container").classList.remove(textStyle);
+  document.getElementById("image-hover-sup").innerText = "";
   hasFocused = false;
 }
