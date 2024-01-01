@@ -168,11 +168,6 @@ nav {
   top: -15%;
 }
 
-#rest-of-images {
-  min-width: 100vw;
-  min-height: 100vh;
-}
-
 .pseudo-hidden {
   display: none;
   position: relative;
@@ -258,4 +253,30 @@ nav {
 
 .hidden {
   display: none;
+}
+
+.appear {
+  transition: all 0.8s;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.appear.inview {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.3s;
+}
+
+.appear:nth-child(even) {
+  transition-delay: 0.6s; /* Add a delay for odd-indexed elements */
+}
+
+#gallery {
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.gallery-image {
+  width: 40vmin;
+  height: 56vmin;
 }

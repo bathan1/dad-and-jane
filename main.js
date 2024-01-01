@@ -14,6 +14,14 @@ const numGalleryImages = {
   4: 3,
 }
 
+const galleryIndex = {
+  0: "korea-gallery",
+  1: "food-gallery",
+  2: "wedding-gallery",
+  3: "selfies-gallery",
+  4: "todo-gallery"
+}
+
 const incrementer = document.getElementById("curr-img");
 const track = document.getElementById("image-track");
 
@@ -88,10 +96,12 @@ function handleMouseMove(e) {
 
 let cumulativeScrollDelta = 0; // This will accumulate the scroll delta
 let scrollTimeout;
+
 function handleScroll(e) {
   if (hasFocused) {
     return;
   }
+
   const scrollSensitivity = 0.33;
   
   // Accumulate the scroll delta
@@ -254,8 +264,7 @@ function expandImage(image) {
   }, 1250);
 
   window.addEventListener('click', escapeFocus);
-
-  text.addEventListener('click', handleTextClick);
+  text.addEventListener('click', (e) => handleTextClick(e, closestIndex));
 }
 
 function escapeFocus(e) {
@@ -264,20 +273,32 @@ function escapeFocus(e) {
   }
 }
 
-const handleTextClick = (e) => {
-  window.removeEventListener('click', escapeFocus);
-  const restOfImages = document.getElementById("rest-of-images");
-  restOfImages.scrollIntoView({ behavior: "smooth" });
+const handleTextClick = (e, currGalleryIndex) => {
+  console.log(currGalleryIndex);
+  const galleryContainer = document.getElementById("gallery");
+  galleryContainer.scrollIntoView({ behavior: "smooth" });  
+  const galleryId = galleryIndex[currGalleryIndex];
+  document.getElementById(galleryId).classList.remove("hidden");
+
+  window.removeEventListener("click", escapeFocus);
+  window.removeEventListener("mousedown", handleMouseDown)
+  window.removeEventListener("mouseup", handleMouseUp); 
+  window.removeEventListener("mousemove", handleMouseMove);
+
+  window.addEventListener("click", handleBackThumbnailClick);
+  window.focus();
 }
 
 /**
   * Function to return back to the thumbnail image from the gallery.
   */
-const handleBackThumbnailClick = (e) => {
+const handleBackThumbnailClick = (e, currGalleryIndex) => {
   document.getElementById("main-flex").scrollIntoView({ behavior: "smooth" });
   window.addEventListener("click", escapeFocus); // Add back escape button to return to gallery.
+  window.addEventListener("mousedown", handleMouseDown)
+  window.addEventListener("mouseup", handleMouseUp); 
+  window.addEventListener("mousemove", handleMouseMove);
 }
-
 
 const getTextStyle = (closestIndex) => {
   switch (closestIndex) {
@@ -322,3 +343,4 @@ function unfocusImage(image, textStyle) {
   document.getElementById("image-hover-sup").innerText = "";
   hasFocused = false;
 }
+
