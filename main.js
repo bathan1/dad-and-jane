@@ -54,7 +54,39 @@ const isDragging = (e) => {
   return mouseDelta > deltaThreshold || clickDuration > timeThreshold;
 }
 
+const foodColors = [
+  "#df715b",
+  "#dfa720",
+  "#587477",
+  "#3b5f34",
+  "#c27e4c"
+];
+
+const handleRecipientsColorChange = (closestIndex) => {
+  switch (closestIndex) {
+    case 1:
+      for (const letter of document.querySelectorAll(".dad-letter")) {
+        const i = Math.floor(Math.random() * foodColors.length);
+        letter.style.color = foodColors[i];
+      }
+      for (const letter of document.querySelectorAll(".jane-letter")) {
+        const i = Math.floor(Math.random() * foodColors.length);
+        letter.style.color = foodColors[i];
+      }
+      break;
+    case 3:
+      for (const letter of document.querySelectorAll(".dad-letter")) {
+        letter.style.color = "#ea0273";
+      }
+      for (const letter of document.querySelectorAll(".jane-letter")) {
+        letter.style.color = "#18c1ed";
+      }
+      break;
+  } 
+}
+
 const focusClosest = () => {
+  handleRecipientsColorChange(closestIndex);
   const focused = images[closestIndex];
   const centerX = window.innerWidth * 0.5;
   const rect = focused.getBoundingClientRect();
@@ -314,7 +346,18 @@ const getTextStyle = (closestIndex) => {
   }
 }
 
+const clearRecipientColor = () => {
+    for (const letter of document.querySelectorAll(".dad-letter")) {
+      letter.style.color = "";
+    }
+    for (const letter of document.querySelectorAll(".jane-letter")) {
+      letter.style.color = "";
+    }
+}
+
 function unfocusImage(image, textStyle) {
+  clearRecipientColor(); 
+
   window.removeEventListener("click", escapeFocus);
   const text = document.getElementById("image-text");
   text.classList.remove("visible");

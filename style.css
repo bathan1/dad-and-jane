@@ -286,3 +286,69 @@ nav {
 #back-button {
   cursor: pointer;
 }
+
+#dad-span {
+  color: black;
+  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+#jane-span {
+  color: black;
+  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.d-dad-one {
+  color: black;
+  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.a-dad {
+  color: black;
+  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.d-dad-two {
+  color: black;
+  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.j-jane {
+  color: black;
+  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.a-jane {
+  color: black;
+  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.n-jane {
+  color: black;
+  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.e-jane {
+  color: black;
+  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+
+.d-dad-two.selfie-color {
+  color: #ea0273;
+}
+
+.j-jane.selfie-color {
+  color: #18c1ed;
+}
+
+.a-jane.selfie-color {
+  color: #18c1ed;
+}
+
+.n-jane.selfie-color {
+  color: #18c1ed;
+}
+
+.e-jane.selfie-color {
+  color: #18c1ed;
+}
