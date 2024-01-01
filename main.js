@@ -1,3 +1,45 @@
+const actions = {
+  0: "traveled to",
+  1: "ate a bunch of",
+  2: "had a",
+  3: "took many",
+  4: "have so much more"
+}
+
+const imageProps = {
+  0: {
+    title: "KOREA",
+    actionText: "traveled to",
+    numImages: 5,
+    galleryId: "korea-gallery"
+  },
+  1: {
+    title: "FOOD (no way)",
+    actionText: "ate lots of",
+    numImages: 2,
+    galleryId: "food-gallery"
+  },
+  2: {
+    title: "WEDDING",
+    actionText: "had a",
+    numImages: 3,
+    galleryId: "wedding-gallery"
+  },
+  3: {
+    title: "SELFIES (lol)",
+    actionText: "took many",
+    numImages: 3,
+    galleryId: "selfies-gallery"
+  },
+  4: {
+    title: "to do",
+    actionText: "have a bunch more",
+    numImages: 3,
+    galleryId: "misc-gallery"
+  },
+
+};
+
 const blurbs = {
   0: "KOREA",
   1: "FOOD (wow)",
@@ -62,9 +104,9 @@ const foodColors = [
   "#c27e4c"
 ];
 
-const handleRecipientsColorChange = (closestIndex) => {
-  switch (closestIndex) {
-    case 1:
+const handleRecipientsColorChange = (curr) => {
+  switch (curr) {
+    case document.getElementById("food-thumbnail"):
       for (const letter of document.querySelectorAll(".dad-letter")) {
         const i = Math.floor(Math.random() * foodColors.length);
         letter.style.color = foodColors[i];
@@ -74,7 +116,7 @@ const handleRecipientsColorChange = (closestIndex) => {
         letter.style.color = foodColors[i];
       }
       break;
-    case 3:
+    case document.getElementById("selfies-thumbnail"):
       for (const letter of document.querySelectorAll(".dad-letter")) {
         letter.style.color = "#ea0273";
       }
@@ -85,15 +127,35 @@ const handleRecipientsColorChange = (closestIndex) => {
   } 
 }
 
-const focusClosest = () => {
-  handleRecipientsColorChange(closestIndex);
-  const focused = images[closestIndex];
-  const centerX = window.innerWidth * 0.5;
-  const rect = focused.getBoundingClientRect();
-  const focusedCenterX = rect.left + (rect.width / 2);
-  const delta = (centerX - focusedCenterX) * -1;
-  focusImage(delta, focused);
-  hasFocused = true;
+async function imageCallback() {
+  const imageDelta = await centerImage(this);
+  isFocused = await focusImage(imageDelta, this);
+  for (const image of images) {
+    image.removeEventListener('click', imageCallback);
+  }
+  await expandImage(this);
+
+  setTimeout(() => {
+    this.removeEventListener("click", imageCallback);
+    window.addEventListener('click', escapeFocus);
+    document.getElementById("image-text").addEventListener('click', (e) => handleTextClick(e, getIndex(this)));
+  }, 2000)
+}
+
+async function centerImage(curr) {
+  return new Promise((res, rej) => {
+    try {
+      curr.removeEventListener("click", centerImage);
+      handleRecipientsColorChange(curr);
+      const centerX = window.innerWidth * 0.5;
+      const rect = curr.getBoundingClientRect();
+      const focusedCenterX = rect.left + (rect.width / 2);
+      const delta = (centerX - focusedCenterX) * -1;
+      res(delta);
+    } catch (err) {
+      rej(err);
+    }
+  }) 
 }
 
 let clickStart = 0;
@@ -103,19 +165,15 @@ function handleMouseDown(e) {
   document.body.classList.add("no-select");
 }
 
-let hasFocused = false;
+let isFocused = false;
 function handleMouseUp(e) {
-  if (!isDragging(e) && !hasFocused) {
-    focusClosest();
-  } 
-  
   track.dataset.mouseDownAt = "0";
   track.dataset.prevPercentage = track.dataset.percentage;
   document.body.classList.remove("no-select");
 }
 
 function handleMouseMove(e) {
-  if (track.dataset.mouseDownAt === "0" || hasFocused) {
+  if (track.dataset.mouseDownAt === "0" || isFocused) {
     return;
   }
 
@@ -130,7 +188,7 @@ let cumulativeScrollDelta = 0; // This will accumulate the scroll delta
 let scrollTimeout;
 
 function handleScroll(e) {
-  if (hasFocused) {
+  if (isFocused) {
     return;
   }
 
@@ -172,6 +230,10 @@ window.ontouchend = e => handleMouseUp(e.touches[0]);
 window.ontouchmove = e => handleMouseMove(e.touches[0]);
 
 const images = document.querySelectorAll(".image");
+for (const image of images) {
+  image.addEventListener("click", imageCallback);
+}
+
 let closestIndex = 0;
 function updateCount() {
   const centerX = window.innerWidth * 0.5; // Center of the viewport
@@ -217,98 +279,106 @@ function buildThresholdList() {
 // Call updateCount initially to set the counter at the start
 updateCount();
 
-const actions = {
-  0: "traveled to",
-  1: "ate lots of",
-  2: "had a",
-  3: "took many",
-  4: "have so much more"
-}
 
-function moveRecipients() {
+function centerDadAndJaneText(currImage) {
   const tempIgnoreList = document.querySelectorAll(".no-hl");
   for (let el of tempIgnoreList) {
     el.classList.add("invisible");
     el.style.position = "absolute";
   }
 
-  document.getElementById("verb-span").innerText = actions[closestIndex];
+  const imageIndex = getIndex(currImage);
+  document.getElementById("verb-span").innerText = actions[imageIndex];
   document.getElementById("verb-div").classList.add("reveal-text");
 }
 
-function focusImage(delta, imageToExpand) {
-  moveRecipients();
-  const maxDelta = track.scrollWidth;
-  const percentage = (delta / maxDelta) * -100;
-  const nextPercentageNotBound = parseFloat(track.dataset.prevPercentage) + percentage;
-  const nextPercentage = Math.max(Math.min(nextPercentageNotBound, 0), -100);
-  
-  track.dataset.percentage = nextPercentage;
-  track.animate({
-    transform: `translate(${nextPercentage}%, -50%)`,
-  }, { duration: 400, fill: "forwards" });
-  
-  document.getElementById("x-hair").animate({
-    opacity: `0%`
-  }, { duration: 400, fill: "forwards" });
-
-  for (const image of track.getElementsByClassName("image")) {
-    if (image !== imageToExpand) {
-      image.animate({
-        objectPosition: `${100 + nextPercentage}% center`,
-        opacity: "0%"
-      }, { duration: 400, fill: "forwards" });
-    } else {
-      image.animate({
-        objectPosition: "center"
-      }, { duration: 400, fill: "forwards" });
-    }
+function getIndex(image) {
+  switch (image) {
+    case document.getElementById("korea-thumbnail"):
+      return 0;
+    case document.getElementById("food-thumbnail"):
+      return 1;
+    case document.getElementById("wedding-thumbnail"):
+      return 2;
+    case document.getElementById("selfies-thumbnail"):
+      return 3;
+    case document.getElementById("misc-thumbnail"):
+      return 4;
   }
+}
 
-  setTimeout(() => {
-    expandImage(imageToExpand);
-  }, 0); // Start expanding after the centering animation completes
+async function focusImage(delta, imageToExpand) {
+  return new Promise((res) => {
+    centerDadAndJaneText(imageToExpand);
+    const maxDelta = track.scrollWidth;
+    const percentage = (delta / maxDelta) * -100;
+    const nextPercentageNotBound = parseFloat(track.dataset.prevPercentage) + percentage;
+    const nextPercentage = Math.max(Math.min(nextPercentageNotBound, 0), -100);
+    
+    track.dataset.percentage = nextPercentage;
+    track.animate({
+      transform: `translate(${nextPercentage}%, -50%)`,
+    }, { duration: 400, fill: "forwards" });
+    
+    document.getElementById("x-hair").animate({
+      opacity: `0%`
+    }, { duration: 400, fill: "forwards" });
+
+    for (const image of track.getElementsByClassName("image")) {
+      if (image !== imageToExpand) {
+        image.animate({
+          objectPosition: `${100 + nextPercentage}% center`,
+          opacity: "0%"
+        }, { duration: 400, fill: "forwards" });
+      } else {
+        image.animate({
+          objectPosition: "center"
+        }, { duration: 400, fill: "forwards" });
+      }
+    }
+    imageToExpand.classList.add("focused");
+    res(true);
+  });
 };
 
-function expandImage(image) { 
-  image.style.transition = "transform 0.5s ease";
-  if (closestIndex !== 3) {
-    image.style.transform = "scale(2.5)";
-  } else {
-    image.style.transform = "scale(2.25)";
-  }
-  image.style.objectFit = "contain";
+async function expandImage(image) { 
+  return new Promise((res) => {
+    const imageIndex = getIndex(image);
+    image.style.transition = "transform 0.5s ease";
+    if (imageIndex !== 3) {
+      image.style.transform = "scale(2.5)";
+    } else {
+      image.style.transform = "scale(2.25)";
+    }
+    image.style.objectFit = "contain";
 
-  const textContainer = document.getElementById("image-text-container");
-  textContainer.classList.remove("hidden");
-  const text = document.getElementById("image-text");
-  const textSup = document.getElementById("image-hover-sup");
+    const textContainer = document.getElementById("image-text-container");
+    textContainer.classList.remove("hidden");
+    const titleContainer = document.getElementById("image-text");
+    const textSup = document.getElementById("image-hover-sup");
 
-  const textStyle = getTextStyle(closestIndex);
-  const superscript = numGalleryImages[closestIndex];
-  setTimeout(() => {
-    text.innerHTML = blurbs[closestIndex];
-    if (textStyle) {
+    const textStyle = getTextStyle(imageIndex);
+    const superscript = imageProps[imageIndex].numImages;
+    setTimeout(() => {
+      titleContainer.innerHTML = imageProps[imageIndex].title;
       textContainer.classList.add(textStyle);
       textSup.innerHTML = superscript;
-    }
-    text.classList.add("visible");
-  }, 1250);
-
-  window.addEventListener('click', escapeFocus);
-  text.addEventListener('click', (e) => handleTextClick(e, closestIndex));
+      titleContainer.classList.add("visible");
+    }, 1250)
+    res();
+  })
 }
 
-function escapeFocus(e) {
-  if (e.target != images[closestIndex] || e.target != document.getElementById("image-text")) {
-    unfocusImage(images[closestIndex], getTextStyle(closestIndex));
+async function escapeFocus(e) {
+  if (e.target != document.getElementById("image-text")) {
+    isFocused = await unfocusImage();
   }
 }
 
-const handleTextClick = (e, currGalleryIndex) => {
+const handleTextClick = (e, imageIndex) => {
   const galleryContainer = document.getElementById("gallery");
   galleryContainer.scrollIntoView({ behavior: "smooth" });  
-  const galleryId = galleryIndex[currGalleryIndex];
+  const galleryId = imageProps[imageIndex].galleryId;
   document.getElementById(galleryId).classList.remove("hidden");
 
   window.removeEventListener("click", escapeFocus);
@@ -355,39 +425,52 @@ const clearRecipientColor = () => {
     }
 }
 
-function unfocusImage(image, textStyle) {
-  clearRecipientColor(); 
+async function unfocusImage() {
+  return new Promise((res, rej) => {
+    try {
+      clearRecipientColor(); 
+      window.removeEventListener("click", escapeFocus);
 
-  window.removeEventListener("click", escapeFocus);
-  const text = document.getElementById("image-text");
-  text.classList.remove("visible");
-  
-  document.getElementById("verb-div").classList.remove("reveal-text");
-  for (const el of document.querySelectorAll(".no-hl")) {
-    el.classList.remove("invisible");
-    el.style.position = "static";
-  }
+      const text = document.getElementById("image-text");
+      text.classList.remove("visible");
+      
+      document.getElementById("verb-div").classList.remove("reveal-text");
+      for (const el of document.querySelectorAll(".no-hl")) {
+        el.classList.remove("invisible");
+        el.style.position = "static";
+      }
 
-  setTimeout(() => {
-    image.style.transition = "transform 0.5s ease";
-    image.style.transform = "none";
-    image.style.objectFit = "cover";
-  }, 100);
+      const image = document.querySelector(".focused");
+      setTimeout(() => {
+        image.style.transition = "transform 0.5s ease";
+        image.style.transform = "none";
+        image.style.objectFit = "cover";
+      }, 100);
 
-  setTimeout(() => {
-    document.getElementById("x-hair").animate({
-      opacity: "100%"
-    }, { duration: 450, fill: "forwards" });
-    for (const img of track.getElementsByClassName("image")) {
-      img.animate({
-        opacity: "100%"
-      }, { duration: 450, fill: "forwards" }) 
-    }
-  }, 100);
+      setTimeout(() => {
+        document.getElementById("x-hair").animate({
+          opacity: "100%"
+        }, { duration: 450, fill: "forwards" });
+        for (const img of track.getElementsByClassName("image")) {
+          img.animate({
+            opacity: "100%"
+          }, { duration: 450, fill: "forwards" }) 
+        }
+      }, 100);
 
-  document.getElementById("image-text-container").classList.add("hidden");
-  document.getElementById("image-text-container").classList.remove(textStyle);
-  document.getElementById("image-hover-sup").innerText = "";
-  hasFocused = false;
+      document.getElementById("image-text-container").classList.add("hidden");
+      document.getElementById("image-text-container").classList.remove(getTextStyle(getIndex(image)));
+      document.getElementById("image-hover-sup").innerText = "";
+
+      image.classList.remove("focused");
+      for (const image of images) {
+        image.addEventListener('click', imageCallback);
+      }
+
+      res(false);
+    } catch (error) {
+      rej(error);
+    } 
+  })
 }
 
