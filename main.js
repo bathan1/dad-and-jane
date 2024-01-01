@@ -253,19 +253,19 @@ function expandImage(image) {
     text.classList.add("visible");
   }, 1250);
 
-  window.addEventListener('keyup', escapeFocus);
+  window.addEventListener('click', escapeFocus);
 
   text.addEventListener('click', handleTextClick);
 }
 
 function escapeFocus(e) {
-  if (e.key === "Escape") {
+  if (e.target != images[closestIndex] || e.target != document.getElementById("image-text")) {
     unfocusImage(images[closestIndex], getTextStyle(closestIndex));
   }
 }
 
 const handleTextClick = (e) => {
-  window.removeEventListener('keyup', escapeFocus);
+  window.removeEventListener('click', escapeFocus);
   const restOfImages = document.getElementById("rest-of-images");
   restOfImages.scrollIntoView({ behavior: "smooth" });
 }
@@ -275,8 +275,9 @@ const handleTextClick = (e) => {
   */
 const handleBackThumbnailClick = (e) => {
   document.getElementById("main-flex").scrollIntoView({ behavior: "smooth" });
-  window.addEventListener("keyup", escapeFocus); // Add back escape button to return to gallery.
+  window.addEventListener("click", escapeFocus); // Add back escape button to return to gallery.
 }
+
 
 const getTextStyle = (closestIndex) => {
   switch (closestIndex) {
@@ -289,7 +290,7 @@ const getTextStyle = (closestIndex) => {
 }
 
 function unfocusImage(image, textStyle) {
-  document.removeEventListener("keyup", escapeFocus);
+  window.removeEventListener("click", escapeFocus);
   const text = document.getElementById("image-text");
   text.classList.remove("visible");
   
