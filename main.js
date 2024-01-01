@@ -5,6 +5,15 @@ const blurbs = {
   3: "SELFIES (lol)",
   4: "to do"
 }
+
+const numGalleryImages = {
+  0: 5,
+  1: 2,
+  2: 3,
+  3: 4,
+  4: 3,
+}
+
 const incrementer = document.getElementById("curr-img");
 const track = document.getElementById("image-track");
 
@@ -228,17 +237,23 @@ function expandImage(image) {
   }
   image.style.objectFit = "contain";
 
-  const textStyle = getTextStyle(closestIndex);
+  const textContainer = document.getElementById("image-text-container");
+  textContainer.classList = "";
   const text = document.getElementById("image-text");
+  const textSup = document.getElementById("image-hover-sup");
+
+  const textStyle = getTextStyle(closestIndex);
+  const superscript = numGalleryImages[closestIndex];
   setTimeout(() => {
     text.innerHTML = blurbs[closestIndex];
+    textSup.innerHTML = superscript;
     if (textStyle) {
-      text.classList.add(textStyle);
+      textContainer.classList.add(textStyle);
     }
     text.classList.add("visible");
   }, 1250);
 
-  window.addEventListener('keyup', escapeFocus, { once: true });
+  window.addEventListener('keyup', escapeFocus);
 
   text.addEventListener('click', handleTextClick);
 }
@@ -260,7 +275,7 @@ const handleTextClick = (e) => {
   */
 const handleBackThumbnailClick = (e) => {
   document.getElementById("main-flex").scrollIntoView({ behavior: "smooth" });
-  window.addEventListener("keyup", escapeFocus, { once: true }); // Add back escape button to return to gallery.
+  window.addEventListener("keyup", escapeFocus); // Add back escape button to return to gallery.
 }
 
 const getTextStyle = (closestIndex) => {
@@ -274,6 +289,7 @@ const getTextStyle = (closestIndex) => {
 }
 
 function unfocusImage(image, textStyle) {
+  document.removeEventListener("keyup", escapeFocus);
   const text = document.getElementById("image-text");
   text.classList.remove("visible");
   
@@ -300,9 +316,6 @@ function unfocusImage(image, textStyle) {
     }
   }, 100);
 
-  setTimeout(() => {
-    text.classList.remove(textStyle);
-  }, 500);
-
+  document.getElementById("image-text-container").classList.add("hidden");
   hasFocused = false;
 }

@@ -147,25 +147,25 @@ nav {
 .food-text {
   color: white;
   position: absolute;
-  top: 75%;
-  left: 43%;
+  top: 28%;
+  left: 2.5%;
 }
 
 .wedding-text {
   position: absolute;
-  top: 72%;
+  top: 24%;
 }
 
 .selfies-text {
   color: white;
   position: absolute;
-  top: 12%;
+  top: -36%;
 }
 
 .final-text {
   color: white;
   position: absolute;
-  top: 33%;
+  top: -15%;
 }
 
 #rest-of-images {
@@ -233,4 +233,29 @@ nav {
 @keyframes a-ltr-before{
     0% {transform: translateX(0)}
     100% {transform: translateX(200%)}
+}
+
+#image-text-container {
+  position: relative;
+  text-align: center;
+  z-index: 5;
+}
+
+#image-hover-sup {
+  position: absolute;
+  font-size: smaller;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: transform 0.7s ease;
+  visibility: hidden;
+}
+
+#image-text-container:hover #image-hover-sup {
+  transform: translateY(0);
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.hidden {
+  display: none;
 }
