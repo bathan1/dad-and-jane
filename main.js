@@ -372,6 +372,7 @@ function handleTextClick(e) {
   const galleryContainer = document.getElementById("gallery");
   galleryContainer.scrollIntoView({ behavior: "smooth" });  
   const galleryId = imageProps[imageIndex].galleryId;
+  console.log(galleryId);
   document.getElementById(galleryId).classList.remove("hidden");
 
   window.removeEventListener("click", escapeFocus);
@@ -389,14 +390,16 @@ function handleTextClick(e) {
   * @param {string} galleryId the id of the gallery
   */
 async function handleBackButtonClick(e) {
-  const galleryId = await scrollBackToThumbnail();
+  await scrollBackToThumbnail();
   window.addEventListener("mousedown", handleMouseDown)
   window.addEventListener("mouseup", handleMouseUp); 
   window.addEventListener("mousemove", handleMouseMove);
   setTimeout(() => {
     window.addEventListener("click", escapeFocus); // Add back escape button to return to gallery.
   }, 500)
-  document.getElementById(galleryId).classList.add("hidden");
+  for (const image of document.querySelectorAll(".image-gallery")) {
+    image.classList.add("hidden"); 
+  }
 }
 
 async function scrollBackToThumbnail() {
