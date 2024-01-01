@@ -3,30 +3,35 @@ const imageProps = {
     title: "KOREA",
     actionText: "traveled to",
     numImages: 5,
+    textId: "korea-blurb",
     galleryId: "korea-gallery"
   },
   1: {
     title: "FOOD (no way)",
     actionText: "ate lots of",
     numImages: 2,
+    textId: "food-blurb",
     galleryId: "food-gallery"
   },
   2: {
     title: "WEDDING",
     actionText: "had a",
     numImages: 3,
+    textId: "wedding-blurb",
     galleryId: "wedding-gallery"
   },
   3: {
     title: "SELFIES (lol)",
     actionText: "took many",
     numImages: 3,
+    textId: "selfies-blurb",
     galleryId: "selfies-gallery"
   },
   4: {
     title: "to do",
     actionText: "have a bunch more",
     numImages: 3,
+    textId: "misc-blurb",
     galleryId: "misc-gallery"
   },
 
@@ -106,7 +111,10 @@ async function imageCallback() {
   setTimeout(() => {
     this.removeEventListener("click", imageCallback);
     window.addEventListener('click', escapeFocus);
-    document.getElementById("image-text").addEventListener('click', (e) => handleTextClick(e, getIndex(this)));
+    const imageText = document.querySelector(".image-text");
+    const imageIndex = getIndex(this);
+    imageText.id = imageProps[imageIndex].textId;
+    document.querySelector(".image-text").addEventListener('click', handleTextClick);
   }, 2000)
 }
 
@@ -322,7 +330,8 @@ async function expandImage(image) {
 
     const textContainer = document.getElementById("image-text-container");
     textContainer.classList.remove("hidden");
-    const titleContainer = document.getElementById("image-text");
+    const titleContainer = document.querySelector(".image-text");
+    titleContainer.classList.remove("hidden");
     const textSup = document.getElementById("image-hover-sup");
 
     const textStyle = getTextStyle(imageIndex);
@@ -338,12 +347,28 @@ async function expandImage(image) {
 }
 
 async function escapeFocus(e) {
-  if (e.target != document.getElementById("image-text")) {
+  if (e.target !== document.getElementById("image-text") || e.target !== document.getElementById("back-button")) {
     isFocused = await unfocusImage();
   }
 }
 
-const handleTextClick = (e, imageIndex) => {
+function getImageIndexFromTextId(textObject) {
+  switch (textObject) {
+    case document.getElementById("korea-blurb"):
+      return 0;
+    case document.getElementById("food-blurb"):
+      return 1;
+    case document.getElementById("wedding-blurb"):
+      return 2;
+    case document.getElementById("selfies-blurb"):
+      return 3;
+    case document.getElementById("misc-blurb"):
+      return 4;
+  }
+}
+
+function handleTextClick(e) {
+  const imageIndex = getImageIndexFromTextId(this);
   const galleryContainer = document.getElementById("gallery");
   galleryContainer.scrollIntoView({ behavior: "smooth" });  
   const galleryId = imageProps[imageIndex].galleryId;
@@ -354,7 +379,7 @@ const handleTextClick = (e, imageIndex) => {
   window.removeEventListener("mouseup", handleMouseUp); 
   window.removeEventListener("mousemove", handleMouseMove);
 
-  document.getElementById("back-button").addEventListener("click", (e) => handleBackThumbnailClick(e, galleryId));
+  document.getElementById("back-button").addEventListener("click", handleBackButtonClick);
   window.focus();
 }
 
@@ -363,8 +388,8 @@ const handleTextClick = (e, imageIndex) => {
   * @param e the Event object
   * @param {string} galleryId the id of the gallery
   */
-const handleBackThumbnailClick = (e, galleryId) => {
-  document.getElementById("main-flex").scrollIntoView({ behavior: "smooth" });
+async function handleBackButtonClick(e) {
+  const galleryId = await scrollBackToThumbnail();
   window.addEventListener("mousedown", handleMouseDown)
   window.addEventListener("mouseup", handleMouseUp); 
   window.addEventListener("mousemove", handleMouseMove);
@@ -372,6 +397,18 @@ const handleBackThumbnailClick = (e, galleryId) => {
     window.addEventListener("click", escapeFocus); // Add back escape button to return to gallery.
   }, 500)
   document.getElementById(galleryId).classList.add("hidden");
+}
+
+async function scrollBackToThumbnail() {
+  return new Promise((resolve, reject) => {
+    try {
+      document.getElementById("main-flex").scrollIntoView({ behavior: "smooth" });
+      const galleryId = document.querySelector(".image-gallery").id;
+      return resolve(galleryId);
+    } catch (error) {
+      reject(error);
+    }
+  });
 }
 
 const getTextStyle = (closestIndex) => {
@@ -399,7 +436,7 @@ async function unfocusImage() {
       clearRecipientColor(); 
       window.removeEventListener("click", escapeFocus);
 
-      const text = document.getElementById("image-text");
+      const text = document.querySelector(".image-text");
       text.classList.remove("visible");
       
       document.getElementById("verb-div").classList.remove("reveal-text");
