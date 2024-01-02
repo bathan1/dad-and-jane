@@ -393,16 +393,23 @@ document.getElementById("back-button").addEventListener("click", handleBackButto
   */
 async function handleBackButtonClick(e) {
   await scrollBackToThumbnail();
+  await toggleBodyOverflowY();
   setTimeout(() => {
     window.addEventListener("click", escapeFocus); // Add back escape button to return to gallery.
     window.addEventListener("mousedown", handleMouseDown)
     window.addEventListener("mouseup", handleMouseUp); 
     window.addEventListener("mousemove", handleMouseMove);
-    document.body.style.overflowY = "hidden"; 
   }, 500)
   for (const image of document.querySelectorAll(".image-gallery")) {
     image.classList.add("hidden"); 
   }
+}
+
+async function toggleBodyOverflowY() {
+  return new Promise((resolve) => {
+    document.body.style.overflowY = "hidden";
+    resolve();
+  });
 }
 
 async function scrollBackToThumbnail() {
@@ -437,8 +444,11 @@ const clearRecipientColor = () => {
 }
 
 async function unfocusImage() {
+  await scrollBackToThumbnail();
+  await toggleBodyOverflowY();
   return new Promise((res, rej) => {
     try {
+
       const appearElements = document.querySelectorAll(".appear");
       for (const el of appearElements) {
         el.classList.remove("inview");

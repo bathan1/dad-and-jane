@@ -262,6 +262,8 @@ nav {
   transition: all 0.8s;
   opacity: 0;
   transform: translateY(40px);
+  display: flex;
+  justify-content: center;
 }
 
 .appear.inview {
