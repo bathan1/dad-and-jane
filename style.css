@@ -354,16 +354,16 @@ nav {
   padding-top: 2.5rem;
 }
 
-#korea-flex-container {
+.gallery-flex-container {
   margin: 2vmin;
   display: flex;
 }
 
-#pseudo-back-button-container {
+.pseudo-back-button-container {
   flex: 1;
 }
 
-#korea-images-container {
+.gallery-images-container {
   flex: 3;
 
   display: flex;
