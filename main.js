@@ -436,6 +436,10 @@ const clearRecipientColor = () => {
 async function unfocusImage() {
   return new Promise((res, rej) => {
     try {
+      const appearElements = document.querySelectorAll(".appear");
+      for (const el of appearElements) {
+        el.classList.remove("inview");
+      }
       clearRecipientColor(); 
       window.removeEventListener("click", escapeFocus);
 
@@ -482,3 +486,13 @@ async function unfocusImage() {
   })
 }
 
+const appearElements = document.querySelectorAll(".appear");
+const cb = (entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("inview");
+    }
+  });
+};
+const io = new IntersectionObserver(cb);
+appearElements.forEach(e => io.observe(e));
