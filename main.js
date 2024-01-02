@@ -379,6 +379,8 @@ function handleTextClick(e) {
   window.removeEventListener("mouseup", handleMouseUp); 
   window.removeEventListener("mousemove", handleMouseMove);
 
+  document.body.style.overflowY = "auto";
+
   window.focus();
 }
 
@@ -396,6 +398,7 @@ async function handleBackButtonClick(e) {
     window.addEventListener("mousedown", handleMouseDown)
     window.addEventListener("mouseup", handleMouseUp); 
     window.addEventListener("mousemove", handleMouseMove);
+    document.body.style.overflowY = "hidden"; 
   }, 500)
   for (const image of document.querySelectorAll(".image-gallery")) {
     image.classList.add("hidden"); 
