@@ -7,11 +7,11 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        korea: resolve(__dirname, 'src/korea.html'),
-        food: resolve(__dirname, 'src/food.html'),
-        selfies: resolve(__dirname, 'src/selfies.html'),
-        wedding: resolve(__dirname, 'src/wedding.html'),
-        misc: resolve(__dirname, 'src/misc.html'),
+        korea: resolve(__dirname, 'korea.html'),
+        food: resolve(__dirname, 'food.html'),
+        wedding: resolve(__dirname, 'wedding.html'),
+        selfies: resolve(__dirname, 'selfies.html'),
+        misc: resolve(__dirname, 'misc.html'),
       },
     },
   },

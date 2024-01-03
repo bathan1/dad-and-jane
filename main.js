@@ -354,19 +354,19 @@ document.addEventListener("DOMContentLoaded", () => {
   function handleMainTextClick(e) {
     switch (e.target.id) {
       case "korea-blurb":
-        window.location.href = "/src/korea.html";
+        window.location.href = "/korea.html";
         break
       case "food-blurb":
-        window.location.href = "/src/food.html";
+        window.location.href = "/food.html";
         break
       case "wedding-blurb":
-        window.location.href = "/src/wedding.html";
+        window.location.href = "/wedding.html";
         break
       case "selfies-blurb":
-        window.location.href = "/src/selfies.html";
+        window.location.href = "/selfies.html";
         break
       case "misc-blurb":
-        window.location.href = "/src/misc.html";
+        window.location.href = "/misc.html";
         break
     }
   }
