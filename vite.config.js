@@ -9,6 +9,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         korea: resolve(__dirname, 'src/korea.html'),
         food: resolve(__dirname, 'src/food.html'),
+        selfies: resolve(__dirname, 'src/selfies.html'),
         wedding: resolve(__dirname, 'src/wedding.html'),
         misc: resolve(__dirname, 'src/misc.html'),
       },
