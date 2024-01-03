@@ -1,11 +1,5 @@
-@font-face {
-  font-family: "TimesNewRomanMTStd-BoldCond";
-  src: url("/Times\ New\ Roman\ MT\ Std\ Bold\ Condensed.otf") format("opentype");
-  font-style: normal;
-}
-
 :root {
-  font-family: 'TimesNewRomanMTStd-BoldCond', 'Times New Roman', serif;
+  font-family: 'Inter', 'Times New Roman', serif;
   --bg-color: #0f0f0f;
   --text: #fff;
 }
@@ -119,6 +113,7 @@ nav {
   z-index: 5;
   font-size: 48px;
   cursor: pointer;
+  font-weight: bolder;
 
   opacity: 0;
   visibility: hidden;

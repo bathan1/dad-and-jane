@@ -42,19 +42,19 @@ document.addEventListener("DOMContentLoaded", () => {
     let imagePath;
     switch (htmlId) {
       case "korea":
-        imagePath = `/korea/korea-${i}.JPEG`;
+        imagePath = `korea/korea-${i}.JPEG`;
         break
       case "food":
-        imagePath = `/food/food-${i}.JPG`;
+        imagePath = `food/food-${i}.JPG`;
         break
       case "wedding":
-        imagePath = `/wedding/wedding-${i}.JPG`;
+        imagePath = `wedding/wedding-${i}.JPG`;
         break
       case "selfies":
-        imagePath = `/selfies/selfie-${i}.JPG`
+        imagePath = `selfies/selfie-${i}.JPG`
         break
       case "misc":
-        imagePath = `/misc/misc-${i}.JPG`
+        imagePath = `misc/misc-${i}.JPG`
         break;
     }
 
