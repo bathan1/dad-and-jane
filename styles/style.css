@@ -6,8 +6,8 @@
 
 :root {
   font-family: 'TimesNewRomanMTStd-BoldCond', Times New Roman, serif;
-  --bg-color: #faf0e6;
-  --text: #000;
+  --bg-color: #0f0f0f;
+  --text: #fff;
 }
 
 body {
@@ -45,7 +45,7 @@ nav {
   font-size: 24px;
   width: fit-content;
   height: fit-content;
-  color: #000; 
+  color: var(--text); 
   text-align: center;
 }
 
@@ -102,7 +102,7 @@ nav {
 }
 
 #image-counter {
-  color: #000;
+  color: var(--text);
   font-size: 18px;
   padding: 16px;
   display: flex;
@@ -282,47 +282,47 @@ nav {
 }
 
 #dad-span {
-  color: black;
+  color: var(--text);
   transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 #jane-span {
-  color: black;
+  color: var(--text);
   transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .d-dad-one {
-  color: black;
+  color: var(--text);
   transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .a-dad {
-  color: black;
+  color: var(--text);
   transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .d-dad-two {
-  color: black;
+  color: var(--text);
   transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .j-jane {
-  color: black;
+  color: var(--text);
   transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .a-jane {
-  color: black;
+  color: var(--text);
   transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .n-jane {
-  color: black;
+  color: var(--text);
   transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .e-jane {
-  color: black;
+  color: var(--text);
   transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
