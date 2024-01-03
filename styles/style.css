@@ -5,7 +5,7 @@
 }
 
 :root {
-  font-family: 'TimesNewRomanMTStd-BoldCond', Times New Roman, serif;
+  font-family: 'TimesNewRomanMTStd-BoldCond', 'Times New Roman', serif;
   --bg-color: #0f0f0f;
   --text: #fff;
 }
