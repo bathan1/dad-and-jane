@@ -256,7 +256,7 @@ function buildThresholdList() {
 updateCount();
 
 
-function centerDadAndJaneText(currImage) {
+function centerHeaderText(currImage) {
   const tempIgnoreList = document.querySelectorAll(".no-hl");
   for (let el of tempIgnoreList) {
     el.classList.add("invisible");
@@ -285,7 +285,7 @@ function getIndex(image) {
 
 async function focusImage(delta, imageToExpand) {
   return new Promise((res) => {
-    centerDadAndJaneText(imageToExpand);
+    centerHeaderText(imageToExpand);
     const maxDelta = track.scrollWidth;
     const percentage = (delta / maxDelta) * -100;
     const nextPercentageNotBound = parseFloat(track.dataset.prevPercentage) + percentage;
