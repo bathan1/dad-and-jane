@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         imagePath = `/wedding/wedding-${i}.JPG`;
         break
       case "selfies":
-        imagePath = `/selfies/selfies-${i}.JPG`
+        imagePath = `/selfies/selfie-${i}.JPG`
         break
       case "misc":
         imagePath = `/misc/misc-${i}.JPG`

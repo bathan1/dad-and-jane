@@ -100,22 +100,21 @@ const handleRecipientsColorChange = (curr) => {
   } 
 }
 
-async function imageCallback() {
+async function handleImageClick() {
   const imageDelta = await centerImage(this);
   isFocused = await focusImage(imageDelta, this);
   for (const image of images) {
-    image.removeEventListener('click', imageCallback);
+    image.removeEventListener('click', handleImageClick);
   }
   await expandImage(this);
-
+  this.removeEventListener("click", handleImageClick);
   setTimeout(() => {
-    this.removeEventListener("click", imageCallback);
     window.addEventListener('click', escapeFocus);
-    const imageText = document.querySelector(".image-text");
-    const imageIndex = getIndex(this);
-    imageText.id = imageProps[imageIndex].textId;
-    document.querySelector(".image-text").addEventListener('click', handleTextClick);
-  }, 2000)
+  }, 1000)
+  const imageText = document.querySelector(".image-text");
+  const imageIndex = getIndex(this);
+  imageText.id = imageProps[imageIndex].textId;
+  document.querySelector(".image-text").addEventListener('click', handleTextClick);
 }
 
 async function centerImage(curr) {
@@ -207,7 +206,7 @@ window.ontouchmove = e => handleMouseMove(e.touches[0]);
 
 const images = document.querySelectorAll(".image");
 for (const image of images) {
-  image.addEventListener("click", imageCallback);
+  image.addEventListener("click", handleImageClick);
 }
 
 let closestIndex = 0;
@@ -368,60 +367,7 @@ function getImageIndexFromTextId(textObject) {
 }
 
 function handleTextClick(e) {
-  const imageIndex = getImageIndexFromTextId(this);
-  const galleryContainer = document.getElementById("gallery");
-  galleryContainer.scrollIntoView({ behavior: "smooth" });  
-  const galleryId = imageProps[imageIndex].galleryId;
-  document.getElementById(galleryId).classList.remove("hidden");
-
-  window.removeEventListener("click", escapeFocus);
-  window.removeEventListener("mousedown", handleMouseDown)
-  window.removeEventListener("mouseup", handleMouseUp); 
-  window.removeEventListener("mousemove", handleMouseMove);
-
-  document.body.style.overflowY = "auto";
-
-  window.focus();
-}
-
-document.getElementById("back-button").addEventListener("click", handleBackButtonClick);
-
-/**
-  * Function to return back to the thumbnail image from the gallery.
-  * @param e the Event object
-  * @param {string} galleryId the id of the gallery
-  */
-async function handleBackButtonClick(e) {
-  await scrollBackToThumbnail();
-  await toggleBodyOverflowY();
-  setTimeout(() => {
-    window.addEventListener("click", escapeFocus); // Add back escape button to return to gallery.
-    window.addEventListener("mousedown", handleMouseDown)
-    window.addEventListener("mouseup", handleMouseUp); 
-    window.addEventListener("mousemove", handleMouseMove);
-  }, 500)
-  for (const image of document.querySelectorAll(".image-gallery")) {
-    image.classList.add("hidden"); 
-  }
-}
-
-async function toggleBodyOverflowY() {
-  return new Promise((resolve) => {
-    document.body.style.overflowY = "hidden";
-    resolve();
-  });
-}
-
-async function scrollBackToThumbnail() {
-  return new Promise((resolve, reject) => {
-    try {
-      document.getElementById("main-flex").scrollIntoView({ behavior: "smooth" });
-      const galleryId = document.querySelector(".image-gallery").id;
-      return resolve(galleryId);
-    } catch (error) {
-      reject(error);
-    }
-  });
+  console.log("lol");
 }
 
 const getTextStyle = (closestIndex) => {
@@ -444,18 +390,11 @@ const clearRecipientColor = () => {
 }
 
 async function unfocusImage() {
-  await scrollBackToThumbnail();
-  await toggleBodyOverflowY();
   return new Promise((res, rej) => {
     try {
-
-      const appearElements = document.querySelectorAll(".appear");
-      for (const el of appearElements) {
-        el.classList.remove("inview");
-      }
       clearRecipientColor(); 
-      window.removeEventListener("click", escapeFocus);
 
+      window.removeEventListener("click", escapeFocus);
       const text = document.querySelector(".image-text");
       text.classList.remove("visible");
       
@@ -489,7 +428,7 @@ async function unfocusImage() {
 
       image.classList.remove("focused");
       for (const image of images) {
-        image.addEventListener('click', imageCallback);
+        image.addEventListener('click', handleImageClick);
       }
 
       res(false);
@@ -498,14 +437,3 @@ async function unfocusImage() {
     } 
   })
 }
-
-const appearElements = document.querySelectorAll(".appear");
-const cb = (entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("inview");
-    }
-  });
-};
-const io = new IntersectionObserver(cb);
-appearElements.forEach(e => io.observe(e));
