@@ -114,7 +114,7 @@ async function handleImageClick() {
   const imageText = document.querySelector(".image-text");
   const imageIndex = getIndex(this);
   imageText.id = imageProps[imageIndex].textId;
-  document.querySelector(".image-text").addEventListener('click', handleTextClick);
+  document.querySelector(".image-text").addEventListener('click', handleMainTextClick);
 }
 
 async function centerImage(curr) {
@@ -366,8 +366,24 @@ function getImageIndexFromTextId(textObject) {
   }
 }
 
-function handleTextClick(e) {
-  console.log("lol");
+function handleMainTextClick(e) {
+  switch (e.target.id) {
+    case "korea-blurb":
+      window.location.href = "src/korea.html";
+      break
+    case "food-blurb":
+      window.location.href = "src/food.html";
+      break
+    case "wedding-blurb":
+      window.location.href = "src/wedding.html";
+      break
+    case "selfies-blurb":
+      window.location.href = "src/selfies.html";
+      break
+    case "misc-blurb":
+      window.location.href = "src/misc.html";
+      break
+  }
 }
 
 const getTextStyle = (closestIndex) => {
@@ -397,6 +413,7 @@ async function unfocusImage() {
       window.removeEventListener("click", escapeFocus);
       const text = document.querySelector(".image-text");
       text.classList.remove("visible");
+      text.removeEventListener("click", handleMainTextClick);
       
       document.getElementById("verb-div").classList.remove("reveal-text");
       for (const el of document.querySelectorAll(".no-hl")) {
