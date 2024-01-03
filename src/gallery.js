@@ -35,9 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
       break;
   }
   const backButton = document.getElementById("back-button"); 
-  backButton.onclick = () => {
-    window.location.href = "/#wedding-thumbnail"; 
-  }
+  backButton.onclick = () => window.location.href = "/";
   
   for (let i = 1; i <= length; i++) {
     const randomLeft = getRandomLeft();
