@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
       break;
   }
   const backButton = document.getElementById("back-button"); 
-  backButton.onclick = () => window.location.href = "/";
+  backButton.onclick = () => window.location.href = "/dad-and-jane";
   
   for (let i = 1; i <= length; i++) {
     const randomLeft = getRandomLeft();
