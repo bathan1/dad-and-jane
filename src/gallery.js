@@ -34,6 +34,10 @@ document.addEventListener("DOMContentLoaded", () => {
       length = 3;
       break;
   }
+  const backButton = document.getElementById("back-button"); 
+  backButton.onclick = () => {
+    window.location.href = "/#wedding-thumbnail"; 
+  }
   
   for (let i = 1; i <= length; i++) {
     const randomLeft = getRandomLeft();
@@ -89,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     });
+
   }
 
   const animateThumbnail = (thumbnail, isActive) => {
