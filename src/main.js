@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   let isFocused = false;
-  function handleMouseUp(e) {
+  function handleMouseUp() {
     track.dataset.mouseDownAt = "0";
     track.dataset.prevPercentage = track.dataset.percentage;
     document.body.classList.remove("no-select");
@@ -348,21 +348,6 @@ document.addEventListener("DOMContentLoaded", () => {
   async function escapeFocus(e) {
     if (e.target !== document.getElementById("image-text") || e.target !== document.getElementById("back-button")) {
       isFocused = await unfocusImage();
-    }
-  }
-
-  function getImageIndexFromTextId(textObject) {
-    switch (textObject) {
-      case document.getElementById("korea-blurb"):
-        return 0;
-      case document.getElementById("food-blurb"):
-        return 1;
-      case document.getElementById("wedding-blurb"):
-        return 2;
-      case document.getElementById("selfies-blurb"):
-        return 3;
-      case document.getElementById("misc-blurb"):
-        return 4;
     }
   }
 
